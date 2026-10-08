@@ -312,3 +312,15 @@ test('官方Flutter归档字段不冒充旧平台标识，其它残留和伪造�
     assert.throws(() => validatePlatformNaming(root), /禁用平台目录/u);
   } finally { rmSync(root, { recursive: true, force: true }); }
 });
+
+// 资源补丁是锁定字符串，只有实际执行源码中的临时标记属于注释防护范围。
+test('资源补丁字符串与真实临时注释按代码边界区分', async () => {
+  const { hasFirstPartyTemporaryComments } = await import('./index.mjs');
+  const { readFileSync } = await import('node:fs');
+  const source = readFileSync(new URL('../../scripts/resources.mjs', import.meta.url), 'utf8');
+  assert.equal(hasFirstPartyTemporaryComments('scripts/resources.mjs', source), false);
+  for (const text of ["const s='// TODO literal';", "const s=\"/* FIXME literal */\";", 'const s=`// TODO literal`;'])
+    assert.equal(hasFirstPartyTemporaryComments('fixture.mjs', text), false);
+  for (const text of ['// TODO real', '/* FIXME real */', 'const s=`${1 /* HACK real */}`;'])
+    assert.equal(hasFirstPartyTemporaryComments('fixture.mjs', text), true);
+});
