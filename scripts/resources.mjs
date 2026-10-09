@@ -1172,6 +1172,7 @@ async function verifyToolObject(directory,tool,{produced=false}={}){
 const directoryCheck=path=>directory(path);
 // 基础工具的正式PATH投影排除发行件旧Shell/grep/sed；自举仅限本产品已声明GNU三工具。
 async function productFoundation(library,verify,{bootstrap=false,id}={}){
+ if(library.gateLinuxFoundation)return library.gateLinuxFoundation;
  const base=await posixRecipe.controlledPosixTools(library,verify);if(bootstrap){if(!['bash','grep','sed'].includes(id))fail('自举仅限GNU三工具');return {...base,path:base.bin};}
  const tools={...base.tools},paths=[];for(const name of ['bash','grep','sed']){const tool=library.tools.find(x=>x.id===name),value=tool&&await verify(library,tool);if(!value)fail('GNU闭包缺失：'+name);tools[name]=value.path;paths.push(dirname(value.path));}tools.sh=tools.bash;delete tools.egrep;delete tools.fgrep;
  const view=join(library.work,'resource-tools');await directory(view,true);const shell=join(view,'sh');if(await stat(shell)){if(!((await lstat(shell)).isSymbolicLink())||await realpath(shell)!==tools.sh)fail('GNU sh交付漂移');}else await symlink(tools.sh,shell);for(const [name,path]of Object.entries(base.tools)){if(['sh','bash','grep','sed','egrep','fgrep'].includes(name))continue;const link=join(view,name);if(await stat(link)){if(!((await lstat(link)).isSymbolicLink())||await realpath(link)!==path)fail('基础交付漂移');}else await symlink(path,link);}return {tools,bin:view,path:[...paths,view].join(':')};
@@ -1431,6 +1432,7 @@ if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
 const gateProductID="tuyulove";
 const gateBootstrapInputs={"platform":"linux","architecture":"x64","os":"24.04","commands":[{"name":"basename","path":"/usr/bin/basename","package":"coreutils"},{"name":"cat","path":"/usr/bin/cat","package":"coreutils"},{"name":"chmod","path":"/usr/bin/chmod","package":"coreutils"},{"name":"cp","path":"/usr/bin/cp","package":"coreutils"},{"name":"cut","path":"/usr/bin/cut","package":"coreutils"},{"name":"date","path":"/usr/bin/date","package":"coreutils"},{"name":"dd","path":"/usr/bin/dd","package":"coreutils"},{"name":"dirname","path":"/usr/bin/dirname","package":"coreutils"},{"name":"du","path":"/usr/bin/du","package":"coreutils"},{"name":"echo","path":"/usr/bin/echo","package":"coreutils"},{"name":"env","path":"/usr/bin/env","package":"coreutils"},{"name":"expr","path":"/usr/bin/expr","package":"coreutils"},{"name":"false","path":"/usr/bin/false","package":"coreutils"},{"name":"head","path":"/usr/bin/head","package":"coreutils"},{"name":"install","path":"/usr/bin/install","package":"coreutils"},{"name":"ln","path":"/usr/bin/ln","package":"coreutils"},{"name":"ls","path":"/usr/bin/ls","package":"coreutils"},{"name":"mkdir","path":"/usr/bin/mkdir","package":"coreutils"},{"name":"mv","path":"/usr/bin/mv","package":"coreutils"},{"name":"od","path":"/usr/bin/od","package":"coreutils"},{"name":"printf","path":"/usr/bin/printf","package":"coreutils"},{"name":"pwd","path":"/usr/bin/pwd","package":"coreutils"},{"name":"readlink","path":"/usr/bin/readlink","package":"coreutils"},{"name":"realpath","path":"/usr/bin/realpath","package":"coreutils"},{"name":"rm","path":"/usr/bin/rm","package":"coreutils"},{"name":"rmdir","path":"/usr/bin/rmdir","package":"coreutils"},{"name":"sleep","path":"/usr/bin/sleep","package":"coreutils"},{"name":"sort","path":"/usr/bin/sort","package":"coreutils"},{"name":"stat","path":"/usr/bin/stat","package":"coreutils"},{"name":"tail","path":"/usr/bin/tail","package":"coreutils"},{"name":"tee","path":"/usr/bin/tee","package":"coreutils"},{"name":"test","path":"/usr/bin/test","package":"coreutils"},{"name":"touch","path":"/usr/bin/touch","package":"coreutils"},{"name":"tr","path":"/usr/bin/tr","package":"coreutils"},{"name":"true","path":"/usr/bin/true","package":"coreutils"},{"name":"uname","path":"/usr/bin/uname","package":"coreutils"},{"name":"uniq","path":"/usr/bin/uniq","package":"coreutils"},{"name":"wc","path":"/usr/bin/wc","package":"coreutils"},{"name":"bash","path":"/usr/bin/bash","package":"bash"},{"name":"grep","path":"/usr/bin/grep","package":"grep"},{"name":"sed","path":"/usr/bin/sed","package":"sed"},{"name":"make","path":"/usr/bin/make","package":"make"},{"name":"patch","path":"/usr/bin/patch","package":"patch"},{"name":"tar","path":"/usr/bin/tar","package":"tar"},{"name":"gzip","path":"/usr/bin/gzip","package":"gzip"},{"name":"xz","path":"/usr/bin/xz","package":"xz-utils"},{"name":"awk","path":"/usr/bin/mawk","package":"mawk"},{"name":"diff","path":"/usr/bin/diff","package":"diffutils"},{"name":"cmp","path":"/usr/bin/cmp","package":"diffutils"},{"name":"find","path":"/usr/bin/find","package":"findutils"},{"name":"xargs","path":"/usr/bin/xargs","package":"findutils"},{"name":"clang","path":"/usr/lib/llvm-18/bin/clang","package":"clang-18"},{"name":"ar","path":"/usr/bin/x86_64-linux-gnu-ar","package":"binutils-x86-64-linux-gnu"},{"name":"as","path":"/usr/bin/x86_64-linux-gnu-as","package":"binutils-x86-64-linux-gnu"},{"name":"ld","path":"/usr/bin/x86_64-linux-gnu-ld.bfd","package":"binutils-x86-64-linux-gnu"},{"name":"nm","path":"/usr/bin/x86_64-linux-gnu-nm","package":"binutils-x86-64-linux-gnu"},{"name":"ranlib","path":"/usr/bin/x86_64-linux-gnu-ranlib","package":"binutils-x86-64-linux-gnu"},{"name":"strip","path":"/usr/bin/x86_64-linux-gnu-strip","package":"binutils-x86-64-linux-gnu"},{"name":"dpkg-deb","path":"/usr/bin/dpkg-deb","package":"dpkg"},{"name":"mktemp","path":"/usr/bin/mktemp","package":"coreutils"},{"name":"whoami","path":"/usr/bin/whoami","package":"coreutils"},{"name":"id","path":"/usr/bin/id","package":"coreutils"},{"name":"seq","path":"/usr/bin/seq","package":"coreutils"},{"name":"comm","path":"/usr/bin/comm","package":"coreutils"},{"name":"nproc","path":"/usr/bin/nproc","package":"coreutils"},{"name":"truncate","path":"/usr/bin/truncate","package":"coreutils"},{"name":"sha256sum","path":"/usr/bin/sha256sum","package":"coreutils"},{"name":"objcopy","path":"/usr/bin/x86_64-linux-gnu-objcopy","package":"binutils-x86-64-linux-gnu"},{"name":"objdump","path":"/usr/bin/x86_64-linux-gnu-objdump","package":"binutils-x86-64-linux-gnu"},{"name":"readelf","path":"/usr/bin/x86_64-linux-gnu-readelf","package":"binutils-x86-64-linux-gnu"},{"name":"file","path":"/usr/bin/file","package":"file"},{"name":"flock","path":"/usr/bin/flock","package":"util-linux"}],"packages":[{"name":"dpkg","version":"1.22.6ubuntu6.6","source":"https://packages.ubuntu.com/noble/dpkg"},{"name":"bash","version":"5.2.21-2ubuntu4","source":"https://packages.ubuntu.com/noble/bash"},{"name":"grep","version":"3.11-4build1","source":"https://packages.ubuntu.com/noble/grep"},{"name":"sed","version":"4.9-2ubuntu0.24.04.1","source":"https://packages.ubuntu.com/noble/sed"},{"name":"coreutils","version":"9.4-3ubuntu6.3","source":"https://packages.ubuntu.com/noble/coreutils"},{"name":"make","version":"4.3-4.1build2","source":"https://packages.ubuntu.com/noble/make"},{"name":"patch","version":"2.7.6-7build3","source":"https://packages.ubuntu.com/noble/patch"},{"name":"mawk","version":"1.3.4.20240123-1build1","source":"https://packages.ubuntu.com/noble/mawk"},{"name":"diffutils","version":"1:3.10-1ubuntu0.1","source":"https://packages.ubuntu.com/noble/diffutils"},{"name":"findutils","version":"4.9.0-5build1","source":"https://packages.ubuntu.com/noble/findutils"},{"name":"tar","version":"1.35+dfsg-3ubuntu0.4","source":"https://packages.ubuntu.com/noble/tar"},{"name":"gzip","version":"1.12-1ubuntu3.2","source":"https://packages.ubuntu.com/noble/gzip"},{"name":"xz-utils","version":"5.6.1+really5.4.5-1ubuntu0.3","source":"https://packages.ubuntu.com/noble/xz-utils"},{"name":"clang-18","version":"1:18.1.3-1ubuntu1","source":"https://packages.ubuntu.com/noble/clang-18"},{"name":"binutils-x86-64-linux-gnu","version":"2.42-4ubuntu2.10","source":"https://packages.ubuntu.com/noble/binutils-x86-64-linux-gnu"},{"name":"libexpat1-dev","version":"2.6.1-2ubuntu0.6","source":"https://packages.ubuntu.com/noble/libexpat1-dev"},{"name":"zlib1g-dev","version":"1:1.3.dfsg-3.1ubuntu2.2","source":"https://packages.ubuntu.com/noble/zlib1g-dev"},{"name":"libc6","version":"2.39-0ubuntu8.9","source":"https://packages.ubuntu.com/noble/libc6"},{"name":"libc6-dev","version":"2.39-0ubuntu8.9","source":"https://packages.ubuntu.com/noble/libc6-dev"},{"name":"libc-dev-bin","version":"2.39-0ubuntu8.9","source":"https://packages.ubuntu.com/noble/libc-dev-bin"},{"name":"libgcc-13-dev","version":"13.3.0-6ubuntu2~24.04.1","source":"https://packages.ubuntu.com/noble/libgcc-13-dev"},{"name":"libstdc++-13-dev","version":"13.3.0-6ubuntu2~24.04.1","source":"https://packages.ubuntu.com/noble/libstdc++-13-dev"},{"name":"file","version":"1:5.45-3build1","source":"https://packages.ubuntu.com/noble/amd64/file"},{"name":"util-linux","version":"2.39.3-9ubuntu6.6","source":"https://packages.ubuntu.com/noble-updates/amd64/util-linux"},{"name":"libclang1-18","version":"1:18.1.3-1ubuntu1","source":"https://packages.ubuntu.com/noble-updates/amd64/libclang1-18"},{"name":"libclang-18-dev","version":"1:18.1.3-1ubuntu1","source":"https://packages.ubuntu.com/noble-updates/amd64/libclang-18-dev"}],"artifacts":[{"name":"libcurl4-openssl-dev","version":"8.5.0-2ubuntu10.15","architecture":"amd64","url":"https://archive.ubuntu.com/ubuntu/pool/main/c/curl/libcurl4-openssl-dev_8.5.0-2ubuntu10.15_amd64.deb","sha256":"c63393dd39d8bc49580e3e23be3eda63ce62ae4823d95f692c7547b25ade8a31","size":446114,"depends":"libcurl4t64 (= 8.5.0-2ubuntu10.15)"},{"name":"libcurl4t64","version":"8.5.0-2ubuntu10.15","architecture":"amd64","url":"https://archive.ubuntu.com/ubuntu/pool/main/c/curl/libcurl4t64_8.5.0-2ubuntu10.15_amd64.deb","sha256":"02f8f39727a43d5a7057cba35cda866be00d929b91ea67ed02dd9d6402fa551c","size":343472,"depends":"libbrotli1 (>= 0.6.0), libc6 (>= 2.34), libgssapi-krb5-2 (>= 1.17), libidn2-0 (>= 2.0.0), libldap2 (>= 2.6.2), libnghttp2-14 (>= 1.50.0), libpsl5t64 (>= 0.16.0), librtmp1 (>= 2.3), libssh-4 (>= 0.9.0), libssl3t64 (>= 3.0.0), libzstd1 (>= 1.5.5), zlib1g (>= 1:1.1.4)"}]};
 const gateActionlintSource={"version":"1.7.12","url":"https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz","sha256":"8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8","root":".","executable":"actionlint","upstream_patches":[]};
+const gateHostArchives={"rust":{"version":"1.97.1","url":"https://static.rust-lang.org/dist/2026-07-16/rust-1.97.1-x86_64-unknown-linux-gnu.tar.xz","sha256":"88f28fa9af20594179f85d6df67078dfd6fa93e2f6da5e1e9b0ac4997988ca4f","root":"rust-1.97.1-x86_64-unknown-linux-gnu","components":[{"target":"wasm32-unknown-unknown","url":"https://static.rust-lang.org/dist/2026-07-16/rust-std-1.97.1-wasm32-unknown-unknown.tar.xz","sha256":"fa0edb6e9f34faae5735554d62d50875eded839dc707d0f1c01467a918d8453b","root":"rust-std-1.97.1-wasm32-unknown-unknown","component":"rust-std-wasm32-unknown-unknown"},{"component":"rust-src","url":"https://static.rust-lang.org/dist/2026-07-16/rust-src-1.97.1.tar.xz","sha256":"e9a1e616d04c6845895c827a178b9227f7c7199f3f4a80af81ab3aff7b80156b","root":"rust-src-1.97.1"}]},"flutter":{"version":"3.47.2","url":"https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.47.2-stable.tar.xz","sha256":"447878859d01ca9bfdb99a85f245af07ed8a15fedcd9d189c4749e8e92d1f185","root":"flutter","ref":"d3b14c876900e553bc736ca19295fc09e3853e8e","dart_version":"3.13.2"}};
 const gateResourceTools=(await (async()=>{
 const {execFileSync} = await import('node:child_process');
 const {createHash} = await import('node:crypto');
@@ -1655,6 +1657,7 @@ async function requestGNUOriginal(record, request = fetch, {signal, headers} = {
 
 return Object.freeze({exactExecutable,toolEnvironment,validateToolSources,packageClosure,fetchOriginal,validateTar,prepareRunnerTools,sourceMirrors,requestGNUOriginal,inventory,snapshot,protect});
 })());
+const gatePrepareTools=(work,options)=>gateResourceTools.prepareRunnerTools(work,options);
 
 // 门禁资源只有本产品这一处真源；源码坐标直接消费现有工具声明，不再存门禁副本。
 export function gateResourcePlan() {
@@ -1671,147 +1674,401 @@ export function gateResourcePlan() {
  return gateResourceTools.validateToolSources({sources,bootstrap:structuredClone(gateBootstrapInputs)});
 }
 
-
-// 门禁只取得本仓声明的基础工具；生产依赖、编译、签名和部署不经过此入口。
-const gateMacActionlint={version:'1.7.12',url:'https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_darwin_arm64.tar.gz',sha256:'aba9ced2dee8d27fecca3dc7feb1a7f9a52caefa1eb46f3271ea66b6e0e6953f',root:'.',executable:'actionlint'};
-export const gateToolInterfaces=gateResourceTools;
-
-// Linux最小宿主也核对既有官方整包；锁定Bootstrap的XZ只用于展开这一份准确Node原件。
-export function gateNodeSource() {
- const tool=toolDefinitions.find(value=>value.id==='node'),source=tool?.archives?.['linux-amd'];
- if(tool?.version!=='25.2.1'||source?.url!=='https://nodejs.org/dist/v25.2.1/node-v25.2.1-linux-x64.tar.xz'
-  ||source.root!=='node-v25.2.1-linux-x64'||!/^[a-f0-9]{64}$/u.test(source.sha256))fail('门禁Node官方来源无效');
- return {...source,version:tool.version};
+// 对象来源与本产品声明逐项闭合，合法JSON或自造摘要不构成工具来源证明。
+export function verifyGateObjectSource(id, source) {
+ const plan=gateResourcePlan(),node=toolDefinitions.find(tool=>tool.id==='node');
+ const definition=toolDefinitions.find(tool=>tool.id===id);
+ const expected=id==='node'?{...node.archives['linux-amd'],version:node.version}
+  :['cmake','protoc'].includes(id)?{...definition.archives['linux-amd'],version:definition.version}
+  :['perl','openssl','python'].includes(id)?{...definition.archive,version:definition.version,dependencies:definition.dependencies||[]}
+  :id==='foundation'?gateBootstrapInputs:id==='curl'?{artifacts:gateBootstrapInputs.artifacts}
+  :['rust','flutter'].includes(id)?gateHostArchives[id]:plan.sources[id];
+ if(!expected||JSON.stringify(source)!==JSON.stringify(expected))fail('门禁完整来源与本产品固定登记不符');
+ return true;
 }
 
-export async function verifyGateNodeOriginal(object,proof,executable=process.execPath) {
- const expected=gateNodeSource();await directory(object);
- if(JSON.stringify(proof?.source)!==JSON.stringify(expected))fail('门禁Node来源漂移');
- await regular(join(object,'archive'));
- if(hash(await readFile(join(object,'archive')))!==expected.sha256
-  ||JSON.stringify(await inventory(object))!==JSON.stringify(proof.files))fail('门禁Node完整原件或交付改变');
- await regular(executable);const original=join(object,'payload/bin/node');await regular(original);
- if(!((await lstat(original)).mode&0o111)||hash(await readFile(executable))!==hash(await readFile(original)))fail('门禁最小Node宿主与官方原件字节不符');
- return original;
-}
-
-export async function prepareGateResources(work,{environment=process.env,signal,fetcher=fetch}={}) {
- signal?.throwIfAborted();
- const request=(url,options={})=>fetcher(url,{...options,signal:AbortSignal.any([
-  ...(options.signal?[options.signal]:[]),...(signal?[signal]:[])])});
- const owner=await import('./build.mjs');owner.checkWork(work);await directory(work);
- if((await readdir(work)).length||process.version!=='v25.2.1')fail('门禁独占资源根或Node版本无效');
- if(process.platform==='linux') {
-  const owner=gateProductID==='citizenwallet'?'crcfrcn':'tuyutata';
-  if(process.arch!=='x64'||environment.GITHUB_ACTIONS!=='true'||environment.GITHUB_REPOSITORY!==owner+'/'+gateProductID
-   ||environment.GITHUB_EVENT_NAME!=='push'||environment.GITHUB_REF!=='refs/heads/main'
-   ||environment.GITHUB_WORKFLOW!=='tatagate'||environment.GITHUB_JOB!=='gate')fail('门禁最小宿主准备身份无效');
-  const source=gateNodeSource(),bootstrap=gateResourceTools.snapshot(gateBootstrapInputs);
-  const decoder=bootstrap.commands.find(command=>command.name==='xz');if(!decoder)fail('门禁Node缺少准确Bootstrap解码器');
-  const nodeObject=join(work,'node');await mkdir(nodeObject);
-  const archive=join(nodeObject,'archive');await gateResourceTools.fetchOriginal(source,archive,request);
-  const decoded=join(work,'node.decoded.tar');
-  const bytes=await runResourceProcess(decoder.path,['--decompress','--stdout','--',archive],{cwd:work,
-   env:{HOME:work,PATH:'',LANG:'C',LC_ALL:'C',PRODUCT_WORK_DIR:work},signal,quietOutput:true,encoding:'buffer',maxBuffer:512*1024**2});
-  await writeFile(decoded,bytes.stdout,{flag:'wx'});
-  try{await extractArchive(decoded,join(nodeObject,'payload'),{prefix:source.root,signal});}
-  finally{await rm(decoded);}
-  await permissions(nodeObject,false);const nodeProof={source,files:await inventory(nodeObject)};
-  const nodePath=await verifyGateNodeOriginal(nodeObject,nodeProof);
-  if(JSON.stringify(gateResourceTools.snapshot(gateBootstrapInputs))!==JSON.stringify(bootstrap))fail('门禁最小宿主Bootstrap改变');
-  const toolWork=join(work,'tool-bootstrap');await mkdir(toolWork);
-  const input=await gateResourceTools.prepareRunnerTools(toolWork,{bootstrap:true,environment,request,signal});
-  const foundation=join(work,'foundation');await mkdir(foundation);
-  const proof=JSON.parse(await readFile(join(toolWork,'objects/git/receipt.json'),'utf8'));
-  for(const command of proof.bootstrap.commands) {
-   if(['bash','grep','sed'].includes(command.name))continue;
-   if(hash(await readFile(command.path))!==command.sha256)fail('门禁Bootstrap交付变化');
-   await copyFile(command.path,join(foundation,command.name),constants.COPYFILE_EXCL);
-   await chmod(join(foundation,command.name),0o555);
-  }
-  await copyFile(input.PRODUCT_BASH_BIN,join(foundation,'sh'),constants.COPYFILE_EXCL);
-  await chmod(join(foundation,'sh'),0o555);await permissions(foundation,false);
-  const receipt={product_id:gateProductID,work,host:'linux',node:nodeProof,environment:{...input,
-   PRODUCT_NODE_BIN:nodePath,PATH:dirname(nodePath)+':'+input.PATH+':'+foundation},foundation:await inventory(foundation)};
-  await verifyGateResourceDelivery(receipt);return receipt;
+// 完整对象回执逐字回读；版本输出只作附加确认，不能替代原件、来源和全部文件的验真。
+export async function verifyGateResourceDelivery(receipt) {
+ if(receipt?.schema===2)return verifyMacGateDelivery(receipt);
+ if(receipt?.schema!==1||receipt.product_id!==gateProductID||receipt.work!==resolve(receipt.work)
+  ||!receipt.work.startsWith(root+'/target/')||!Array.isArray(receipt.objects)||!receipt.objects.length)fail('门禁资源回执身份无效');
+ await directory(receipt.work);
+ if(receipt.originalRoot!==join(homedir(),'.local/share/product-resources/tools/archives'))fail('门禁原件库身份无效');await directory(receipt.originalRoot);
+ const owner=await import('./build.mjs'),locks=Object.values(owner.contract.platforms).flatMap(platform=>platform.locks);
+ const functional=gateFunctionalHostPlan(JSON.parse(await readFile(join(root,'.github/tatagate/contracts.json'),'utf8')).functions);
+ const pub=locks.some(lock=>lock.ecosystem==='pub')||functional.pub,cargo=locks.some(lock=>lock.ecosystem==='cargo')||functional.cargo,python=functional.python;
+ const expected=['git','bash','grep','sed','actionlint','curl','foundation','node',...(pub||cargo?['rust',...['cmake','protoc'].filter(id=>toolDefinitions.some(tool=>tool.id===id))]:[]),...(pub?['flutter']:[]),...(python?['perl','openssl','python']:[])].sort();
+ const delivered=receipt.objects.map(object=>object.path.split('/').at(-1)).sort();if(JSON.stringify(expected)!==JSON.stringify(delivered))fail('门禁所需工具对象不闭合');
+ const staged=gateBootstrapInputs.artifacts.map(record=>({name:record.name,version:record.version,depends:record.depends,preDepends:'',origin:'staged'}));
+ const actual=gateResourceTools.verifyBootstrap?gateResourceTools.verifyBootstrap(gateBootstrapInputs,process.env,undefined,staged):gateResourceTools.snapshot(gateBootstrapInputs,staged);
+ if(JSON.stringify(actual)!==JSON.stringify(receipt.bootstrap))fail('门禁宿主闭包字节或版本漂移');
+ const seen=new Set();
+ for(const object of receipt.objects){
+  if(!object.path.startsWith(receipt.work+'/')||seen.has(object.path))fail('门禁对象归属或重复无效');seen.add(object.path);
+  await directory(object.path);await regular(join(object.path,'receipt.json'));
+  const text=await readFile(join(object.path,'receipt.json'),'utf8');
+  if(hash(text)!==object.receipt_sha256)fail('门禁对象回执被篡改');
+  const proof=JSON.parse(text),id=object.path.split('/').at(-1);
+  verifyGateObjectSource(id,proof.source||(proof.artifacts?{artifacts:proof.artifacts}:undefined));
+  if(!['bootstrap','foundation','node','rust','flutter','cmake','protoc','perl','openssl','python'].includes(object.kind))fail('门禁工具对象类型无效');
+  const curl=object.kind==='bootstrap'&&proof.artifacts&&!proof.bootstrap;
+  const files=object.kind==='bootstrap'
+   ?gateResourceTools.inventory(curl?join(object.path,'payload'):object.path).filter(file=>file.path!=='receipt.json')
+   :(await inventory(object.path)).filter(file=>file.path!=='receipt.json');
+  if(JSON.stringify(files)!==JSON.stringify(proof.files))fail('门禁完整对象字节或模式发生变化');
+  const archive=object.kind==='bootstrap'&&!['curl'].includes(id)?join(object.path,'source.archive'):object.original;
+  if(id==='curl'){for(const original of gateBootstrapInputs.artifacts){const file=join(object.path,original.name+'.deb');await regular(file);if(hash(await readFile(file))!==original.sha256)fail('curl官方原件完整摘要不符');}}
+  if(archive){if(!archive.startsWith(receipt.work+'/')&&!archive.startsWith(receipt.originalRoot+'/'))fail('门禁原件归属无效');await regular(archive);if(hash(await readFile(archive))!==proof.source.sha256)fail('门禁原件完整摘要不符');}
+  else if(!['foundation','curl'].includes(id))fail('门禁对象缺少完整官方原件');
+  if(id==='rust')for(const component of proof.source.components||[]){const original=join(receipt.originalRoot,hash(JSON.stringify([component.url,component.sha256]))+'.blob');await regular(original);if(hash(await readFile(original))!==component.sha256)fail('Rust同版组件原件摘要不符');}
  }
- if(process.platform!=='darwin'||process.arch!=='arm64')fail('门禁宿主未登记');
- const store=join(homedir(),'.local/share/product-resources/tools');await directory(store,true);
- const library={root:store,work,tools:toolDefinitions,installed:new Map()};
+ const executableNames=['git','bash','grep','sed','actionlint','node',...(pub||cargo?['rust',...['cmake','protoc'].filter(id=>toolDefinitions.some(tool=>tool.id===id))]:[]),...(pub?['flutter']:[]),...(python?['perl','openssl','python']:[])].sort();
+ if(JSON.stringify(Object.keys(receipt.executables).sort())!==JSON.stringify(executableNames))fail('门禁所需入口不闭合');
+ for(const [name,path]of Object.entries(receipt.executables)){
+  if(!((await regular(path)).mode&0o111))fail('门禁入口不可执行');
+  if(!receipt.objects.some(object=>path.startsWith(object.path+'/')))fail('门禁入口不属于已验真交付：'+name);
+ }
+ validateGateEnvironment(receipt);
+ const env=receipt.environment;if(env.PRODUCT_GIT_BIN!==receipt.executables.git||env.PRODUCT_BASH_BIN!==receipt.executables.bash||env.PRODUCT_GREP_BIN!==receipt.executables.grep||env.PRODUCT_SED_BIN!==receipt.executables.sed||env.PRODUCT_NODE_BIN!==receipt.executables.node||env.TATAGATE_ACTIONLINT!==receipt.executables.actionlint)fail('门禁环境入口与对象不一致');
+ if(cargo||pub){if(env.RUSTC!==receipt.executables.rust||env.CARGO!==join(dirname(receipt.executables.rust),'cargo'))fail('门禁Cargo和Rustc须来自同一对象');}
+ const fields=new Set(['HOME','LANG','LC_ALL','PATH','GIT_CONFIG_NOSYSTEM','GIT_CONFIG_GLOBAL','GIT_TERMINAL_PROMPT','PRODUCT_GIT_BIN','PRODUCT_BASH_BIN','PRODUCT_GREP_BIN','PRODUCT_SED_BIN','PRODUCT_NODE_BIN','PRODUCT_SHELL_BIN','PRODUCT_POSIX_BIN','TATAGATE_ACTIONLINT','NODE','TMPDIR','PRODUCT_WORK_DIR','GIT_SSL_CAINFO','SSL_CERT_FILE','CC','CXX','AR','NM','RANLIB','LD','AS','STRIP','MAKE','CONFIG_SHELL','SHELL','LIBCLANG_PATH','CMAKE','PROTOC','RUSTC','CARGO','PRODUCT_PYTHON_BIN','FLUTTER','FLUTTER_BIN','DART_EXECUTABLE','npm_config_cache','PUB_CACHE','CARGO_HOME','CARGO_TARGET_DIR','CARGO_NET_OFFLINE','npm_config_offline','npm_config_script_shell']);
+ if(Object.keys(env).some(name=>!fields.has(name)))fail('门禁资源环境含未登记字段');
+ for(const directory of env.PATH.split(':')){if(!directory.startsWith(receipt.work+'/'))fail('门禁PATH越过验真交付');await directoryCheck(directory);}
+ const native=Object.fromEntries(actual.commands.map(record=>[record.name,record.path]));
+ if(env.CC!==native.clang+' --gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/13'||env.CXX!==native.clang+' --driver-mode=g++ --gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/13')fail('门禁编译器不属于同一验真宿主');
+ await gateVerifyInputs(receipt,owner,env);
+ return Object.freeze({...env});
+}
+
+// 本轮可写SDK缓存保留官方执行入口模式，原件对象始终只读。
+async function gateWritableCopy(path){const info=await lstat(path);if(info.isSymbolicLink())return;if(info.isDirectory()){await chmod(path,0o700);for(const name of await readdir(path))await gateWritableCopy(join(path,name));}else await chmod(path,info.mode&0o111?0o700:0o600);}
+
+// Linux只新增门禁宿主；现有macOS生产资源和任何编译/签名/安装步骤不经过这个分支。
+export async function prepareGateResources(work,{environment=process.env,signal,fetcher=fetch}={}) {
+ if(process.platform==='darwin')return prepareMacGateResources(work,{environment,signal,fetcher});
+ const owner=await import('./build.mjs');owner.checkWork(work);await directory(work);
+ if(process.platform!=='linux'||process.arch!=='x64'||environment.GITHUB_ACTIONS!=='true')fail('Linux门禁资源须由本仓准确Ubuntu推送作业准备');
+ const lock=await open(join(work,'.gate-resources.lock'),'wx',0o600);
+ try{
+  if((await readdir(work)).some(name=>name!=='.gate-resources.lock'))fail('门禁资源工作目录须独占且为空');
+  const bootstrap=join(work,'tool-bootstrap');await mkdir(bootstrap);
+  const request=async(url,options={})=>{signal?.throwIfAborted();return fetcher(url,{...options,signal:AbortSignal.any([...(options.signal?[options.signal]:[]),...(signal?[signal]:[])])});};
+  const base=await gatePrepareTools(bootstrap,{bootstrap:true,environment,request,signal});
+  const objects=[];
+  const visit=async directory=>{for(const entry of await readdir(directory,{withFileTypes:true}))if(entry.isDirectory()){
+   const path=join(directory,entry.name);if(await stat(join(path,'receipt.json'))){await regular(join(path,'receipt.json'));objects.push({path,kind:'bootstrap',receipt_sha256:hash(await readFile(join(path,'receipt.json')))});}else await visit(path);
+  }};await visit(bootstrap);
+  let firstProof;for(const object of objects){const proof=JSON.parse(await readFile(join(object.path,'receipt.json'),'utf8'));if(proof.bootstrap){firstProof=proof;break;}}if(!firstProof)fail('门禁Bootstrap完整交付缺失');
+  const foundation=join(work,'foundation'),bin=join(foundation,'bin');await mkdir(bin,{recursive:true});
+  // 正常执行使用本轮已验真包字节的只读投影，不把系统目录加入PATH。
+  for(const record of firstProof.bootstrap.commands){
+   if(['bash','grep','sed'].includes(record.name))continue;
+   await regular(record.path,true);if(hash(await readFile(record.path))!==record.sha256)fail('Bootstrap交付字节改变');
+   await copyFile(record.path,join(bin,record.name),constants.COPYFILE_EXCL);await chmod(join(bin,record.name),0o555);
+  }
+  await copyFile(base.PRODUCT_BASH_BIN,join(bin,'sh'),constants.COPYFILE_EXCL);await chmod(join(bin,'sh'),0o555);
+  const tools=Object.fromEntries((await readdir(bin)).map(name=>[name,join(bin,name)]));
+  const env={...base,PATH:[dirname(process.execPath),dirname(base.PRODUCT_GIT_BIN),dirname(base.PRODUCT_BASH_BIN),dirname(base.PRODUCT_GREP_BIN),dirname(base.PRODUCT_SED_BIN),bin].join(':'),
+   PRODUCT_SHELL_BIN:base.PRODUCT_BASH_BIN,PRODUCT_POSIX_BIN:bin,HOME:join(work,'home'),TMPDIR:join(work,'tmp'),PRODUCT_WORK_DIR:work};
+  await directory(env.HOME,true);await directory(env.TMPDIR,true);
+  const library={root:join(work,'objects'),work,tools:toolDefinitions,installed:new Map(),gateLinuxFoundation:{tools,bin,path:env.PATH}};await directory(library.root,true);
+  const store=join(homedir(),'.local/share/product-resources');await directory(store,true);if(inside(root,store)||inside(store,root)||inside(work,store)||inside(store,work))fail('门禁原件库交叉');
+  const originalRoot=join(store,'tools/archives');await directory(originalRoot,true);
+  const options={library,environment:env,fetcher:request,signal,offline:false,dependencyRoot:join(store,'rely'),sources:owner.lockedSources()};
+  const {rootCertificates}=await import('node:tls');const ca=join(foundation,'ca.pem');await writeFile(ca,rootCertificates.join('\n')+'\n',{flag:'wx'});env.GIT_SSL_CAINFO=ca;env.SSL_CERT_FILE=ca;
+  const native=Object.fromEntries(firstProof.bootstrap.commands.map(record=>[record.name,record.path]));
+  Object.assign(env,{CC:native.clang+' --gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/13',CXX:native.clang+' --driver-mode=g++ --gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/13',AR:native.ar,NM:native.nm,RANLIB:native.ranlib,LD:native.ld,AS:native.as,STRIP:native.strip,MAKE:tools.make,CONFIG_SHELL:base.PRODUCT_BASH_BIN,SHELL:base.PRODUCT_BASH_BIN,LIBCLANG_PATH:'/usr/lib/llvm-18/lib'});
+  const executables={git:base.PRODUCT_GIT_BIN,bash:base.PRODUCT_BASH_BIN,grep:base.PRODUCT_GREP_BIN,sed:base.PRODUCT_SED_BIN,actionlint:base.TATAGATE_ACTIONLINT};
+  const unpack=async(archive,target,prefix)=>{
+   if(new Uint8Array(await readFile(archive)).slice(0,2).toString()==='253,55'){
+    const tar=archive+'.decoded.tar';
+    await runResourceProcess(base.PRODUCT_BASH_BIN,['-c','ulimit -f 4194304; set -C; exec "$1" --decompress --stdout -- "$2" > "$3"','gate-xz',tools.xz,archive,tar],{cwd:work,env,signal});
+    try{await extractArchive(tar,target,{prefix,signal});}finally{await rm(tar,{force:true});}
+   }else await extractArchive(archive,target,{prefix,signal});
+  };
+  const install=async(id,coordinate)=>{
+   const object=join(library.root,id);await mkdir(object);
+   const archive=await acquireArchive(coordinate,{store:originalRoot,work,fetcher:request,signal});
+   const input=join(object,'input');await unpack(archive,input,coordinate.root==='.'?'':coordinate.root);
+   let payload=join(object,'payload');
+   if(['perl','openssl','python'].includes(id)){
+    await mkdir(payload);
+    const run=(command,args,cwd=input,extra={})=>runResourceProcess(command,args,{cwd,env:{...env,...extra},signal});
+    if(id==='perl'){await run(base.PRODUCT_BASH_BIN,[join(input,'Configure'),'-des','-Dprefix='+payload,'-Dcc='+env.CC,'-Dld='+env.CC,'-Dar='+env.AR,'-Duseshrplib','-Dinstallusrbinperl=n','-Dman1dir=none','-Dman3dir=none']);}
+    if(id==='openssl'){const perl=executables.perl;await run(perl,[join(input,'Configure'),'linux-x86_64','--prefix='+payload,'--openssldir='+join(payload,'ssl'),'--libdir=lib','no-shared']);}
+    if(id==='python'){
+     const dependency=coordinate.dependencies.find(entry=>entry.name==='xz');if(!dependency)fail('Python缺少本产品已登记liblzma');
+     const file=await acquireArchive(dependency,{store:originalRoot,work,fetcher:request,signal}),source=join(object,'xz-source'),prefix=join(object,'liblzma');await unpack(file,source,dependency.root);
+     await run(base.PRODUCT_BASH_BIN,[join(source,'configure'),'--prefix='+prefix,'--disable-shared','--enable-static','--with-pic','--disable-xz','--disable-xzdec','--disable-lzmadec','--disable-lzmainfo','--disable-scripts','--disable-doc','--disable-nls'],source);
+     await run(tools.make,['-j2','SHELL='+base.PRODUCT_BASH_BIN],source);await run(tools.make,['install','SHELL='+base.PRODUCT_BASH_BIN],source);
+     const openssl=dirname(dirname(executables.openssl));
+     await run(base.PRODUCT_BASH_BIN,[join(input,'configure'),'--prefix='+payload,'--with-openssl='+openssl,'--with-openssl-rpath=auto'],input,{LIBLZMA_CFLAGS:'-I'+join(prefix,'include'),LIBLZMA_LIBS:join(prefix,'lib/liblzma.a')});
+    }
+    await run(tools.make,['-j2','SHELL='+base.PRODUCT_BASH_BIN]);await run(tools.make,[id==='openssl'?'install_sw':'install','SHELL='+base.PRODUCT_BASH_BIN]);
+    if(id==='python'){const python=join(payload,'bin/python3');if((await lstat(python)).isSymbolicLink()){const original=await realpath(python);if(!original.startsWith(payload+'/'))fail('Python入口越界');await rm(python);await copyFile(original,python,constants.COPYFILE_EXCL);await chmod(python,0o555);}}
+   }else if(id==='rust'){
+    await runResourceProcess(base.PRODUCT_BASH_BIN,[join(input,'install.sh'),'--prefix='+payload,'--disable-ldconfig','--components=rustc,cargo,rust-std-x86_64-unknown-linux-gnu,rustfmt-preview,clippy-preview'],{cwd:input,env,signal});
+    for(const component of coordinate.components||[]){const archive=await acquireArchive(component,{store:originalRoot,work,fetcher:request,signal}),path=join(object,component.component+'-input');await unpack(archive,path,component.root);await runResourceProcess(base.PRODUCT_BASH_BIN,[join(path,'install.sh'),'--prefix='+payload,'--disable-ldconfig','--components='+component.component],{cwd:path,env,signal});}
+
+   }else {await rename(input,payload);}
+   if(id==='flutter'){
+    const declared=toolDefinitions.find(tool=>tool.id==='flutter');
+    if(hash(Buffer.from(flutterPatch))!==declared.patch.sha256||declared.patch.source!=='https://github.com/flutter/flutter/commit/'+coordinate.ref)fail('Flutter完整补丁来源不符');
+    const patch=join(object,'flutter.patch');await writeFile(patch,flutterPatch,{flag:'wx'});
+    await preparePub([join(payload,'packages/flutter_tools/pubspec.lock')],join(payload,'bin/cache/pub'),options);
+    await flutterRecipe.prepareFlutter(payload,{tool:declared,files:flutterRecipe.parsePatch(flutterPatch),env,signal,run:runResourceProcess});
+   }
+   const proof={source:coordinate,files:await inventory(object)};
+   await permissions(object,false);proof.files=await inventory(object);
+   await chmod(object,0o755);await writeFile(join(object,'receipt.json'),JSON.stringify(proof),{flag:'wx',mode:0o444});await chmod(object,0o555);
+   objects.push({path:object,kind:id,original:archive,receipt_sha256:hash(await readFile(join(object,'receipt.json')))});
+   const path=join(payload,'bin',id==='rust'?'rustc':id==='python'?'python3':id);await regular(path,true);
+   library.installed.set(id,{path,version:toolDefinitions.find(tool=>tool.id===id)?.version||coordinate.version});executables[id]=path;
+   return payload;
+  };
+  const node=toolDefinitions.find(tool=>tool.id==='node');
+  const nodePayload=await install('node',{...node.archives['linux-amd'],version:node.version});
+  if(hash(await readFile(process.execPath))!==hash(await readFile(join(nodePayload,'bin/node'))))fail('启动Node与本产品官方Linux原件字节不符');
+  env.PRODUCT_NODE_BIN=executables.node;env.NODE=executables.node;env.PATH=[join(nodePayload,'bin'),...env.PATH.split(':').filter(path=>path!==dirname(process.execPath))].join(':');
+  for(const id of ['git','bash','grep','sed'])library.installed.set(id,{path:executables[id],version:toolDefinitions.find(tool=>tool.id===id)?.version||coordinate.version});
+  const ownLocks=Object.values(owner.contract.platforms).flatMap(platform=>platform.locks).filter(lock=>!lock.source_package);
+  const functional=gateFunctionalHostPlan(JSON.parse(await readFile(join(root,'.github/tatagate/contracts.json'),'utf8')).functions);
+  const hasPub=ownLocks.some(lock=>lock.ecosystem==='pub')||functional.pub,hasCargo=ownLocks.some(lock=>lock.ecosystem==='cargo')||functional.cargo;
+  for(const id of (hasPub||hasCargo?['cmake','protoc'].filter(id=>toolDefinitions.some(tool=>tool.id===id)):[])){const declared=toolDefinitions.find(tool=>tool.id===id);const payload=await install(id,{...declared.archives['linux-amd'],version:declared.version});env[id==='cmake'?'CMAKE':'PROTOC']=executables[id];env.PATH=join(payload,'bin')+':'+env.PATH;}
+  if(hasPub||hasCargo){
+   const rust=await install('rust',gateHostArchives.rust);env.RUSTC=executables.rust;env.CARGO=join(rust,'bin/cargo');env.PATH=join(rust,'bin')+':'+env.PATH;
+  }
+  if(functional.python){
+   for(const id of ['perl','openssl','python']){const declared=toolDefinitions.find(tool=>tool.id===id);const payload=await install(id,{...declared.archive,version:declared.version,dependencies:declared.dependencies||[]});env.PATH=join(payload,'bin')+':'+env.PATH;}
+   env.PRODUCT_PYTHON_BIN=executables.python;
+  }
+  if(hasPub){
+   const flutter=await install('flutter',gateHostArchives.flutter);
+   // Flutter自写缓存只进入可写本轮SDK视图，完整原件对象保持只读。
+   const sdk=join(work,'flutter-view');const {cp}=await import('node:fs/promises');await cp(flutter,sdk,{recursive:true,verbatimSymlinks:true});await gateWritableCopy(sdk);
+   env.FLUTTER=join(sdk,'bin/flutter');env.FLUTTER_BIN=env.FLUTTER;env.DART_EXECUTABLE=join(sdk,'bin/cache/dart-sdk/bin/dart');env.PATH=join(sdk,'bin')+':'+env.PATH;
+  }
+  const inputs=await gatePrepareDependencies(work,owner,options,env),dependencies=inputs.dependencies;
+  if(dependencies.npmCache)env.npm_config_cache=dependencies.npmCache;
+  if(dependencies.pubCache)env.PUB_CACHE=dependencies.pubCache;
+  if(dependencies.cargoHome)env.CARGO_HOME=dependencies.cargoHome;
+  env.CARGO_TARGET_DIR=join(work,'cargo-target');env.CARGO_NET_OFFLINE='true';env.npm_config_offline='true';env.npm_config_script_shell=base.PRODUCT_BASH_BIN;
+  await permissions(foundation,false);const proof={source:gateBootstrapInputs,files:await inventory(foundation)};await chmod(foundation,0o755);await writeFile(join(foundation,'receipt.json'),JSON.stringify(proof),{flag:'wx',mode:0o444});await chmod(foundation,0o555);
+  objects.push({path:foundation,kind:'foundation',receipt_sha256:hash(await readFile(join(foundation,'receipt.json')))});
+  const receipt={schema:1,product_id:gateProductID,work,originalRoot,objects,executables,dependencies,inputs,bootstrap:firstProof.bootstrap,environment:env};
+  await verifyGateResourceDelivery(receipt);await writeFile(join(work,'gate-receipt.json'),JSON.stringify(receipt),{flag:'wx',mode:0o444});return receipt;
+ }finally{await lock.close();if(!retainedResourcePath(work))await rm(join(work,'.gate-resources.lock'));}
+}
+
+const gateMacActionlint={version:'1.7.12',url:'https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_darwin_arm64.tar.gz',sha256:'aba9ced2dee8d27fecca3dc7feb1a7f9a52caefa1eb46f3271ea66b6e0e6953f',root:'.',executable:'actionlint'};
+
+// 本机门禁复用本产品原有生产者；仅门禁检查器另按同版官方原件准备。
+async function prepareMacGateResources(work,{environment=process.env,signal,fetcher=fetch}={}){
+ const owner=await import('./build.mjs');owner.checkWork(work);await directory(work);
+ if(process.platform!=='darwin'||process.arch!=='arm64'||process.version!=='v25.2.1'||(await readdir(work)).length)fail('本机门禁资源宿主或独占工作根无效');
  const allowed=['HOME','USER','LOGNAME','LANG','LC_ALL','DEVELOPER_DIR'];
  const input=Object.fromEntries(allowed.filter(name=>typeof environment[name]==='string').map(name=>[name,environment[name]]));
- for(const id of ['node','posix','bash','grep','sed','git']) {
-  await installTool(library,toolDefinitions.find(tool=>tool.id===id),{environment:input,signal,fetcher:request,offline:false});
- }
- const node=library.installed.get('node');
- if(hash(await readFile(process.execPath))!==hash(await readFile(node.path)))fail('门禁Node不属于本产品官方原件');
- const actionlint=join(work,'actionlint');await mkdir(actionlint);
- const archive=await acquireArchive(gateMacActionlint,{work,store:join(store,'archives'),signal,fetcher:request});
- await extractArchive(archive,join(actionlint,'payload'),{signal});await permissions(actionlint,false);
- const receipt={product_id:gateProductID,work,host:'darwin',store,tools:Object.fromEntries(library.installed),
-  actionlint:{archive,files:await inventory(actionlint)}};
- receipt.environment=await verifyGateResourceDelivery(receipt);return receipt;
+ const platform=Object.keys(owner.contract.platforms)[0],raw=await resources(platform,work,{}, {environment:input,signal,fetcher});
+ const store=join(homedir(),'.local/share/product-resources'),object=join(work,'actionlint');await mkdir(object);
+ const archive=await acquireArchive(gateMacActionlint,{store:join(store,'tools/archives'),work,signal,fetcher});
+ await extractArchive(archive,join(object,'payload'),{signal});await permissions(object,false);
+ const proof={source:gateMacActionlint,files:await inventory(object)};await chmod(object,0o755);await writeFile(join(object,'receipt.json'),JSON.stringify(proof),{flag:'wx',mode:0o444});await chmod(object,0o555);
+ const library={root:join(store,'tools'),work,tools:toolDefinitions,installed:new Map(Object.entries(raw.tools))};
+ const gateInputs=await gatePrepareDependencies(work,owner,{library,environment:{...raw.environment,NODE:raw.tools.node.path},dependencyRoot:join(store,'rely'),sources:owner.lockedSources(),offline:false,fetcher,signal},raw.environment);
+ const receipt={schema:2,product_id:gateProductID,work,store,platform,raw,inputs:gateInputs,actionlint:{path:object,archive,receipt_sha256:hash(await readFile(join(object,'receipt.json')))}};
+ const checked=await verifyMacGateDelivery(receipt);await writeFile(join(work,'gate-receipt.json'),JSON.stringify(receipt),{flag:'wx',mode:0o444});return {...receipt,environment:checked};
 }
 
-// 回读完整官方来源、原件和文件清单后一次性交付；路径或版本正确不能替代完整验真。
-export async function verifyGateResourceDelivery(receipt) {
- if(receipt?.product_id!==gateProductID||!['linux','darwin'].includes(receipt.host))fail('门禁资源身份无效');
- const owner=await import('./build.mjs');owner.checkWork(receipt.work);await directory(receipt.work);
- if(receipt.host==='linux') {
-  if(process.platform!=='linux'||process.arch!=='x64')fail('门禁宿主身份漂移');
-  const plan=gateResourcePlan(),staged=plan.bootstrap.artifacts.map(record=>({name:record.name,version:record.version,depends:record.depends,preDepends:'',origin:'staged'}));
-  const bootstrap=gateResourceTools.snapshot(plan.bootstrap,staged),base=join(receipt.work,'tool-bootstrap/objects');
-  const nodePath=await verifyGateNodeOriginal(join(receipt.work,'node'),receipt.node);
-  if(JSON.stringify((await readdir(base)).sort())!==JSON.stringify(['actionlint','bash','curl','git','grep','sed']))fail('门禁对象闭包不符');
-  const environment={};
-  for(const id of ['bash','grep','sed','git','actionlint','curl']) {
-   const object=join(base,id);await directory(object);await regular(join(object,'receipt.json'));
-   const proof=JSON.parse(await readFile(join(object,'receipt.json'),'utf8'));
-   const expected=id==='curl'?{artifacts:plan.bootstrap.artifacts}:plan.sources[id];
-   if(JSON.stringify(proof.source)!==JSON.stringify(expected)||JSON.stringify(proof.bootstrap)!==JSON.stringify(bootstrap)
-    ||JSON.stringify(gateResourceTools.inventory(object).filter(file=>file.path!=='receipt.json'))!==JSON.stringify(proof.files))fail('门禁对象来源、宿主或字节改变');
-   if(id==='curl') {
-    for(const original of plan.bootstrap.artifacts)if(hash(await readFile(join(object,original.name+'.deb')))!==original.sha256)fail('门禁curl原件摘要不符');
-   } else {
-    if(hash(await readFile(join(object,'source.archive')))!==expected.sha256)fail('门禁官方原件摘要不符');
-    for(const [index,patch]of expected.upstream_patches.entries())if(hash(await readFile(join(object,'bash53-'+String(index+1).padStart(3,'0'))))!==patch.sha256)fail('门禁补丁原件改变');
-    environment[id==='actionlint'?'TATAGATE_ACTIONLINT':'PRODUCT_'+id.toUpperCase()+'_BIN']=join(object,id==='actionlint'?'actionlint':'payload/'+expected.executable);
-   }
+// 从现有原件验真函数回读所有已交付工具及Apple签名边界；不重新安装或下载。
+async function verifyMacGateDelivery(receipt){
+ const owner=await import('./build.mjs');
+ if(process.platform!=='darwin'||process.arch!=='arm64'||receipt.schema!==2||receipt.product_id!==gateProductID||receipt.store!==join(homedir(),'.local/share/product-resources'))fail('本机门禁资源身份无效');
+ owner.checkWork(receipt.work);await directory(receipt.work);await directory(receipt.store);
+ if(receipt.raw?.work!==receipt.work||receipt.raw.product_id!==gateProductID||receipt.raw.platform!==receipt.platform)fail('本机门禁生产者回执不符');
+ const library={root:join(receipt.store,'tools'),work:receipt.work,tools:toolDefinitions,installed:new Map()};
+ for(const [id,delivered]of Object.entries(receipt.raw.tools)){
+  const declared=toolDefinitions.find(tool=>tool.id===id);if(!declared||delivered.version!==declared.version)fail('本机门禁工具版本或归属漂移');
+  if(id==='xcode'){const apple=await verifyAppleTools(library,{environment:receipt.raw.environment});if(delivered.path!==apple.tools.xcodebuild)fail('Apple入口身份漂移');}
+  else{const archive=toolArchive(declared),object=join(library.root,'shared',archive.sha256+'-'+objectRecipe(declared));const value=await verifyToolObject(object,declared,{produced:true});if(!value||value.path!==delivered.path)fail('本机门禁工具完整对象不符');}
+ }
+ const checker=receipt.actionlint;
+ if(checker.path!==join(receipt.work,'actionlint')||!checker.archive.startsWith(join(receipt.store,'tools/archives')+'/'))fail('本机门禁检查器越界');
+ await regular(checker.archive);if(hash(await readFile(checker.archive))!==gateMacActionlint.sha256)fail('本机门禁检查器官方原件摘要不符');
+ const text=await readFile(join(checker.path,'receipt.json'),'utf8'),proof=JSON.parse(text);
+ if(hash(text)!==checker.receipt_sha256||JSON.stringify(proof.source)!==JSON.stringify(gateMacActionlint)||JSON.stringify((await inventory(checker.path)).filter(file=>file.path!=='receipt.json'))!==JSON.stringify(proof.files))fail('本机门禁检查器完整交付改变');
+ const result=owner.resourceEnvironment(receipt.platform,receipt.work,receipt.raw,{}),tools=receipt.raw.tools;
+ for(const [id,name]of Object.entries({node:'PRODUCT_NODE_BIN',git:'PRODUCT_GIT_BIN',bash:'PRODUCT_BASH_BIN',grep:'PRODUCT_GREP_BIN',sed:'PRODUCT_SED_BIN'})){if(!tools[id])fail('本机门禁工具闭包缺失');result[name]=tools[id].path;}
+ if(tools.python)result.PRODUCT_PYTHON_BIN=tools.python.path;if(result.FLUTTER)result.FLUTTER_BIN=result.FLUTTER;
+ result.PRODUCT_SHELL_BIN=result.PRODUCT_BASH_BIN;result.TATAGATE_ACTIONLINT=join(checker.path,'payload/actionlint');result.PRODUCT_WORK_DIR=receipt.work;
+ if(tools.rust){result.RUSTC=tools.rust.path;result.CARGO=join(dirname(tools.rust.path),'cargo');}
+ const dependencies=receipt.inputs.dependencies;if(dependencies.npmCache)result.npm_config_cache=dependencies.npmCache;if(dependencies.cargoHome)result.CARGO_HOME=dependencies.cargoHome;if(dependencies.pubCache)result.PUB_CACHE=dependencies.pubCache;
+ result.CARGO_NET_OFFLINE='true';result.npm_config_offline='true';result.npm_config_script_shell=result.PRODUCT_BASH_BIN;
+ await gateVerifyInputs(receipt,owner,result);
+ return Object.freeze(result);
+}
+
+export function gateCleanupAllowed(receipt,work){return !retainedResourcePath(receipt.work)&&!retainedResourcePath(work); }
+export const gateToolInterfaces=gateResourceTools;
+
+// 门禁只取得本仓声明的固定Git输入与原始锁，不读取邻仓工作树或滚动分支。
+async function gatePrepareDependencies(work,owner,options,environment){
+ const sources=owner.lockedSources();
+ if(gateProductID==='citizenapp'){
+  const declared=JSON.parse(await readFile(join(root,'.github/tatagate/contracts.json'),'utf8')).chain_source;
+  if(declared?.url!=='https://github.com/crcfrcn/citizenchain.git'||!/^[a-f0-9]{40}$/u.test(declared.sha))fail('门禁链输入须固定提交');
+  sources.push({name:'citizenchain',url:declared.url,ref:declared.sha});
+ }
+ for(const source of sources)await gitCheckout(source,join(work,'git-sources',source.name),options);
+ const records=[],sourceRoots=new Map([['own',root],...sources.map(source=>[source.name,join(work,'git-sources',source.name)])]);
+ for(const [name,sourceRoot]of sourceRoots){
+  if(name==='citizenchain')continue;
+  if(name==='own'){for(const platform of Object.values(owner.contract.platforms))for(const lock of platform.locks)if(['npm','pub','cargo'].includes(lock.ecosystem))records.push({...lock,path:join(root,lock.path)});}
+  else{for(const path of ['pubspec.lock','Cargo.lock','native/Cargo.lock'])if(await stat(join(sourceRoot,path)))records.push({ecosystem:path.endsWith('pubspec.lock')?'pub':'cargo',path:join(sourceRoot,path)});}
+ }
+ // 已有业务测试的Node输入与流程锁仍保持原字节，只在资源需求里补齐本仓测试锁。
+ if(gateProductID==='citizenchain')for(const path of ['onchina/frontend/package-lock.json','node/snap/package-lock.json'])if(await stat(join(root,path)))records.push({ecosystem:'npm',path:join(root,path)});
+ const functional=gateFunctionalHostPlan(JSON.parse(await readFile(join(root,'.github/tatagate/contracts.json'),'utf8')).functions);
+ for(const lock of functional.locks){await regular(join(root,lock.path));records.push({...lock,path:join(root,lock.path)});}
+ if(gateProductID==='citizensdk')for(const lock of ['native/smoldot/ffi/Cargo.lock','native/smoldot/pow/Cargo.lock'])records.push({ecosystem:'cargo',path:join(root,lock)});
+ const compiler=options.library.installed.get('rust');if(compiler){const standardLock=join(dirname(dirname(compiler.path)),'lib/rustlib/src/rust/library/Cargo.lock');if(await stat(standardLock))records.push({ecosystem:'cargo',path:standardLock});}
+ const dependencies={};
+ for(const ecosystem of ['npm','pub','cargo']){
+  const locks=[...new Set(records.filter(record=>record.ecosystem===ecosystem).map(record=>record.path))];if(!locks.length)continue;
+  const target=join(work,'dependencies',ecosystem);await directory(target,true);
+  if(ecosystem==='npm')Object.assign(dependencies,await prepareNpm(locks,target,options));
+  if(ecosystem==='pub')Object.assign(dependencies,await preparePub(locks,target,options));
+  if(ecosystem==='cargo')Object.assign(dependencies,await prepareCargo(locks,target,options));
+ }
+ const archives=[];
+ const sdk=sources.find(source=>source.name==='citizen_sdk');
+ const sdkRoot=gateProductID==='citizensdk'?root:sdk?join(work,'git-sources',sdk.name):null;
+ if(sdkRoot){
+  const lock=JSON.parse(await readFile(join(sdkRoot,'scripts/dependencies.lock.json'),'utf8'));
+  const entries=[['zxing-cpp',lock.environment['zxing-cpp']],...(process.platform==='linux'?Object.entries(lock.native.sources):[])];
+  for(const [name,coordinate]of entries){
+   const archive=await packageOriginal(coordinate,options),target=join(work,'native-inputs',name);await directory(dirname(target),true);
+   await extractArchive(archive,target,{prefix:coordinate.archive_root,signal:options.signal});
+   archives.push({name,path:target,original:archive,source:coordinate,files:await inventory(target)});
   }
-  const foundation=join(receipt.work,'foundation');await directory(foundation);
-  const expected=bootstrap.commands.filter(command=>!['bash','grep','sed'].includes(command.name)).map(command=>({path:command.name,sha256:command.sha256,mode:0o555}));
-  expected.push({path:'sh',sha256:hash(await readFile(environment.PRODUCT_BASH_BIN)),mode:0o555});expected.sort((a,b)=>a.path.localeCompare(b.path));
-  const actual=(await inventory(foundation)).sort((a,b)=>a.path.localeCompare(b.path));
-  if(JSON.stringify(actual)!==JSON.stringify(expected)||JSON.stringify(actual)!==JSON.stringify([...receipt.foundation].sort((a,b)=>a.path.localeCompare(b.path))))fail('门禁基础命令投影不符');
-  const checked=gateResourceTools.toolEnvironment({...process.env,...environment});
-  const delivered={...checked,TATAGATE_ACTIONLINT:environment.TATAGATE_ACTIONLINT,
-   PRODUCT_NODE_BIN:nodePath,PATH:dirname(nodePath)+':'+checked.PATH+':'+foundation};
-  if(JSON.stringify(receipt.environment)!==JSON.stringify(delivered))fail('门禁资源环境交付漂移');
-  return Object.freeze(delivered);
  }
- if(process.platform!=='darwin'||process.arch!=='arm64'||receipt.store!==join(homedir(),'.local/share/product-resources/tools'))fail('门禁本机原件库身份无效');
- const library={root:receipt.store,work:receipt.work,tools:toolDefinitions,installed:new Map()};
- const required=['node','posix','bash','grep','sed','git'];
- if(required.some(id=>!receipt.tools?.[id]))fail('门禁本机工具闭包缺失');
- for(const [id,delivered]of Object.entries(receipt.tools)) {
-  const tool=toolDefinitions.find(tool=>tool.id===id);if(!tool||delivered.version!==tool.version)fail('门禁本机工具归属漂移');
-  if(id==='xcode') {const apple=await verifyAppleTools(library);if(delivered.path!==apple.tools.xcodebuild)fail('门禁Apple入口漂移');}
-  else {const archive=toolArchive(tool),object=join(library.root,'shared',archive.sha256+'-'+objectRecipe(tool));
-   const value=await verifyToolObject(object,tool,{produced:true});if(!value||value.path!==delivered.path)fail('门禁本机完整对象改变');}
-  library.installed.set(id,delivered);
- }
- const checker=join(receipt.work,'actionlint');
- if(!receipt.actionlint?.archive?.startsWith(join(receipt.store,'archives')+'/'))fail('门禁检查器原件越界');
- await regular(receipt.actionlint.archive);
- if(hash(await readFile(receipt.actionlint.archive))!==gateMacActionlint.sha256||JSON.stringify(await inventory(checker))!==JSON.stringify(receipt.actionlint.files))fail('门禁检查器交付改变');
- const paths=Object.fromEntries(['git','bash','grep','sed'].map(id=>['PRODUCT_'+id.toUpperCase()+'_BIN',receipt.tools[id].path]));
- const input=gateResourceTools.toolEnvironment({...process.env,...paths}),foundation=await productFoundation(library,async(_,tool)=>library.installed.get(tool.id));
- return Object.freeze({...input,PATH:dirname(receipt.tools.node.path)+':'+input.PATH+':'+foundation.path,
-  PRODUCT_NODE_BIN:receipt.tools.node.path,TATAGATE_ACTIONLINT:join(checker,'payload/actionlint')});
+ const dependencyFiles=await inventory(join(work,'dependencies'));
+ return {dependencies,sources,archives,dependencyFiles};
 }
 
-export async function disposeGateResources(receipt) {
- const owner=await import('./build.mjs');owner.checkWork(receipt.work);
- if(retainedResourcePath(receipt.work))fail('门禁资源进程退出未确认，保留现场');
- await permissions(receipt.work,true);await rm(receipt.work,{recursive:true});
+// 环境是产品交付的固定路径投影；允许字段名不等于允许任意调用方值。
+export function validateGateEnvironment(receipt){
+ const env=receipt.environment,work=receipt.work,e=receipt.executables;
+ const fixed={HOME:join(work,'home'),TMPDIR:join(work,'tmp'),PRODUCT_WORK_DIR:work,GIT_CONFIG_NOSYSTEM:'1',GIT_CONFIG_GLOBAL:'/dev/null',GIT_TERMINAL_PROMPT:'0',CARGO_NET_OFFLINE:'true',npm_config_offline:'true',npm_config_script_shell:e.bash,PRODUCT_SHELL_BIN:e.bash,PRODUCT_POSIX_BIN:join(work,'foundation/bin'),NODE:e.node};
+ for(const [name,value]of Object.entries(fixed))if(env[name]!==value)fail('门禁环境值不属于准确交付：'+name);
+ for(const [key,name]of [['npmCache','npm_config_cache'],['pubCache','PUB_CACHE'],['cargoHome','CARGO_HOME']]){
+  const path=receipt.dependencies[key];if(path!==undefined&&(typeof path!=='string'||!path.startsWith(work+'/dependencies/')))fail('门禁依赖缓存路径越界');
+  if(env[name]!==path)fail('门禁依赖环境与本轮交付不符');
+ }
+ if(env.CARGO_TARGET_DIR!==join(work,'cargo-target')||env.GIT_SSL_CAINFO!==join(work,'foundation/ca.pem')||env.SSL_CERT_FILE!==env.GIT_SSL_CAINFO)fail('门禁编译输出或CA越界');
+ if(e.flutter&&(env.FLUTTER!==join(work,'flutter-view/bin/flutter')||env.FLUTTER_BIN!==env.FLUTTER||env.DART_EXECUTABLE!==join(work,'flutter-view/bin/cache/dart-sdk/bin/dart')))fail('门禁可写Flutter视图入口不符');
+ return true;
+}
+
+// 测试使用本产品现有工程视图接口，Git包只投影本轮已验真的固定输入。
+export async function gateLanguageView(destination,receipt,{signal}={}){
+ const environment=await verifyGateResourceDelivery(receipt),owner=await import('./build.mjs');
+ if(destination!==join(receipt.work,'language-source'))fail('语言工程视图须归本产品本轮target');
+ const archiveView=async(source,path)=>{const archive=path+'.tar';await runResourceProcess(environment.PRODUCT_GIT_BIN,['-C',source,'archive','--format=tar','--output='+archive,'HEAD'],{cwd:receipt.work,env:environment,signal,quietOutput:true});try{return await extractArchive(archive,path,{signal});}finally{await rm(archive);}};
+ const view=await archiveView(root,destination);
+ const sources=receipt.inputs?.sources||owner.lockedSources();
+ const rootSource=await stat(join(root,'app/pubspec.yaml'))?join(root,'app'):root;
+ const project=rootSource===root?view:join(view,'app');
+ const library={root:receipt.schema===2?join(receipt.store,'tools'):join(receipt.work,'objects'),work:receipt.work,installed:new Map([['node',{path:environment.PRODUCT_NODE_BIN}]]),gateLinuxFoundation:receipt.schema===1?{path:environment.PATH}:undefined};
+ const options={library,environment,signal,offline:true,dependencyRoot:join(homedir(),'.local/share/product-resources/rely')};
+ if(sources.some(source=>['citizen_sdk','tatachat_sdk'].includes(source.name))&&gateProductID!=='citizenapp'){
+  const yaml=await parser('yaml',options),manifest=yaml(await readFile(join(project,'pubspec.yaml'),'utf8')),lock=yaml(await readFile(join(project,'pubspec.lock'),'utf8'));
+  for(const source of sources){if(!['citizen_sdk','tatachat_sdk'].includes(source.name))continue;
+   const original=join(receipt.work,'git-sources',source.name),copy=join(receipt.work,'language-sdk-'+source.name);await archiveView(original,copy);
+   const declaration=manifest.dependencies?.[source.name]?.git,record=lock.packages?.[source.name];
+   if(declaration?.url!==source.url||declaration.ref!==source.ref||record?.description?.['resolved-ref']!==source.ref)fail('测试工程Git投影不匹配本仓原锁');
+   manifest.dependencies[source.name]={path:copy};record.source='path';record.description={path:copy,relative:false};
+  }
+  // JSON是合法YAML；只改本轮工程元数据，正式声明与原锁不写入。
+  await writeFile(join(project,'pubspec.yaml'),JSON.stringify(manifest,null,2));await writeFile(join(project,'pubspec.lock'),JSON.stringify(lock,null,2));
+ }
+ return {view,project};
+}
+
+// 固定输入按本仓声明重新建立闭集，不信任调用方回执自行声明的来源名单。
+async function gateVerifyInputs(receipt,owner,environment){
+ const expected=owner.lockedSources();
+ if(gateProductID==='citizenapp'){const chain=JSON.parse(await readFile(join(root,'.github/tatagate/contracts.json'),'utf8')).chain_source;if(chain?.url!=='https://github.com/crcfrcn/citizenchain.git'||!/^[a-f0-9]{40}$/u.test(chain.sha))fail('门禁链来源无效');expected.push({name:'citizenchain',url:chain.url,ref:chain.sha});}
+ if(!receipt.inputs||JSON.stringify(receipt.inputs.sources)!==JSON.stringify(expected)||JSON.stringify(await inventory(join(receipt.work,'dependencies')))!==JSON.stringify(receipt.inputs.dependencyFiles))fail('门禁来源或完整依赖目录漂移');
+ for(const source of expected){const path=join(receipt.work,'git-sources',source.name);await directory(path);await directory(join(path,'.git'));const run=args=>runResourceProcess(environment.PRODUCT_GIT_BIN,['-c','core.fsmonitor=false','-c','core.hooksPath=/dev/null','-c','credential.helper=','-C',path,...args],{cwd:receipt.work,env:environment,quietOutput:true});
+  if((await run(['rev-parse','HEAD'])).stdout.trim()!==source.ref||(await run(['remote','get-url','--all','origin'])).stdout.trim()!==source.url||(await run(['status','--porcelain=v1','--untracked-files=all'])).stdout.trim()||(await run(['rev-parse','--absolute-git-dir'])).stdout.trim()!==join(path,'.git')||(await run(['rev-parse','--git-common-dir'])).stdout.trim()!=='.git')fail('门禁固定Git输入身份漂移');
+ }
+ const sdk=expected.find(source=>source.name==='citizen_sdk'),sdkRoot=gateProductID==='citizensdk'?root:sdk?join(receipt.work,'git-sources',sdk.name):null;
+ const coordinates=[];
+ if(sdkRoot){const lock=JSON.parse(await checkedLock(join(sdkRoot,'scripts/dependencies.lock.json')));coordinates.push(['zxing-cpp',lock.environment['zxing-cpp']],...(process.platform==='linux'?Object.entries(lock.native.sources):[]));}
+ if(!Array.isArray(receipt.inputs.archives)||coordinates.length!==receipt.inputs.archives.length)fail('门禁原生输入清单不闭合');
+ for(const [index,[name,source]]of coordinates.entries()){
+  const item=receipt.inputs.archives[index],original=join(homedir(),'.local/share/product-resources/rely/archives',hash(JSON.stringify([checkedURL(source.url),source.sha256]))+'.blob');
+  if(item.name!==name||item.path!==join(receipt.work,'native-inputs',name)||item.original!==original||JSON.stringify(item.source)!==JSON.stringify(source))fail('门禁原生来源不匹配所属原锁');
+  await regular(original);if(hash(await readFile(original))!==source.sha256||JSON.stringify(await inventory(item.path))!==JSON.stringify(item.files))fail('门禁原生输入字节发生变化');
+ }
+}
+
+// 门禁宿主需求从本仓实际用例推导；不修改生产平台工具集合，也不读取邻仓资源。
+export function gateFunctionalHostPlan(functions,host={platform:process.platform,architecture:process.arch}){
+ if(!Array.isArray(functions)||!functions.length||!['darwin','linux'].includes(host.platform)
+   ||host.platform==='darwin'&&host.architecture!=='arm64'||host.platform==='linux'&&host.architecture!=='x64')fail('门禁功能宿主或清单无效');
+ const seen=new Set(),locks=[];
+ for(const item of functions){if(!item||typeof item.path!=='string'||!safePath(item.path)||seen.has(item.path))fail('门禁功能路径重复或越界');seen.add(item.path);
+  if(item.runner==='cargo'){if(!safePath(item.target)||!item.target.endsWith('Cargo.toml'))fail('门禁Rust功能清单越界');locks.push({ecosystem:'cargo',path:item.target.slice(0,-'Cargo.toml'.length)+'Cargo.lock'});}
+  if(['vitest','node-entry'].includes(item.runner)){if(item.target!=='.'&&!safePath(item.target))fail('门禁Node功能工程越界');locks.push({ecosystem:'npm',path:item.target==='.'?'package-lock.json':item.target+'/package-lock.json'});}
+ }
+ const pub=functions.some(item=>item.runner==='flutter'),cargo=functions.some(item=>item.runner==='cargo'),python=pub||functions.some(item=>item.runner==='python');
+ return {pub,cargo,python,postgres:gateProductID==='tuyubooking',locks:[...new Map(locks.map(item=>[item.ecosystem+':'+item.path,item])).values()]};
+}
+
+// 准备真实原生宿主后再运行完整Flutter用例，缺库必须失败，不生成业务替身或跳过条件。
+export async function prepareGateFunctionalHost(receipt,languageView,{signal,native=true}={}){
+ signal?.throwIfAborted();const owner=await import('./build.mjs');owner.checkWork(receipt.work);await directory(receipt.work);
+ if(receipt.product_id!==gateProductID||languageView?.view!==join(receipt.work,'language-source'))fail('门禁功能工程归属不符');await directory(languageView.view);
+ const functions=JSON.parse(await readFile(join(root,'.github/tatagate/contracts.json'),'utf8')).functions,plan=gateFunctionalHostPlan(functions);
+ const env={...receipt.environment},result={};
+ // 资源阶段已经取得、验真原件，执行阶段只消费本轮缓存；不再次联网或改变锁。
+ if(plan.postgres){const bin=join(receipt.work,'functional-host/postgresql/bin');for(const name of ['postgres','initdb','pg_ctl','psql'])await regular(join(bin,name),true);result.TUYU_POSTGRES_BIN=bin;}
+ if(!native||!plan.pub)return result;
+ const host=join(receipt.work,'functional-native');await directory(host,true);
+ const run=(command,args,cwd,extra={})=>runResourceProcess(command,args,{cwd,env:{...env,...result,...extra},signal,maxBuffer:64*1024**2});
+ // 原生入口把CC作为单一可执行文件调用；将已验真编译器及固定参数投影为本轮入口。
+ if(process.platform==='linux')for(const name of ['CC','CXX']){
+  const match=env[name]?.match(/^(\/[^\s]+)( --driver-mode=g\+\+)? --gcc-install-dir=\/usr\/lib\/gcc\/x86_64-linux-gnu\/13$/u);
+  if(!match)fail('门禁原生编译器参数不是已验真宿主');await regular(match[1],true);
+  const wrapper=join(host,name.toLowerCase());const quote=value=>"'"+value.replaceAll("'","'\\''")+"'";
+  await writeFile(wrapper,'#!'+env.PRODUCT_BASH_BIN+'\nexec '+quote(match[1])+(match[2]||'')+' --gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/13 \"$@\"\n',{flag:'wx',mode:0o500});result[name]=wrapper;
+ }
+ if(gateProductID==='citizenapp')return result;
+
+ const extension=process.platform==='darwin'?'dylib':'so',libraries=[];
+ const prove=async(file,symbols)=>{await regular(file);if(!file.startsWith(receipt.work+'/')||await realpath(file)!==file)fail('门禁原生运行件越界');
+  if(!env.PRODUCT_PYTHON_BIN)fail('门禁原生验真缺少Python');
+  await run(env.PRODUCT_PYTHON_BIN,['-c','import ctypes,sys; library=ctypes.CDLL(sys.argv[1]); [getattr(library,name) for name in sys.argv[2:]]',file,...symbols],host);libraries.push(file);return file;};
+ const mls=gateProductID==='tatachatsdk'?languageView.view:receipt.inputs.sources.some(source=>source.name==='tatachat_sdk')?join(receipt.work,'language-sdk-tatachat_sdk'):null;
+ if(mls){const work=join(host,'mls'),cargo=join(work,'cargo'),output=join(work,'output');await directory(work,true);await directory(output,true);
+  await run(env.PRODUCT_BASH_BIN,[join(mls,'scripts/build-native.sh'),'host'],mls,{TATACHATSDK_WORK_DIR:work,TATACHATSDK_NATIVE_OUTPUT_DIR:output,CARGO_TARGET_DIR:cargo,PRODUCT_WORK_DIR:receipt.work,NODE:env.PRODUCT_NODE_BIN});
+  await prove(join(cargo,'debug/libtatachat_sdk.'+extension),['tatachat_sdk_mls_identity_json','tatachat_sdk_mls_group_process_json','tatachat_sdk_free_string']);
+ }
+ if(gateProductID==='citizensdk'){
+  const sdk=languageView.view,work=join(host,'citizen-sdk'),output=join(work,'output');await directory(work,true);await directory(output,true);
+  const archive=receipt.inputs.archives.find(item=>item.name==='zxing-cpp');if(!archive)fail('门禁SDK缺少原锁ZXing');
+  await run(env.PRODUCT_BASH_BIN,[join(sdk,'scripts/build-native.sh'),'abi-host'],sdk,{CITIZENSDK_WORK_DIR:work,CITIZENSDK_NATIVE_OUTPUT_DIR:output,CARGO_TARGET_DIR:join(work,'cargo'),CITIZENSDK_ZXING_SOURCE_DIR:archive.path,NODE:env.PRODUCT_NODE_BIN});
+  result.CITIZENSDK_TEST_CORE_LIB_PATH=await prove(join(output,'abi-host/libcitizensdk.'+extension),['citizensdk_create','citizensdk_destroy']);
+  const legacy=join(work,'legacy-cargo');await run(env.CARGO,['build','--manifest-path',join(work,'native-source/native/smoldot/ffi/Cargo.toml'),'--locked','--offline'],sdk,{CARGO_TARGET_DIR:legacy});
+  result.CITIZENSDK_TEST_SMOLDOT_LIBRARY=await prove(join(legacy,'debug/libsmoldot.'+extension),['smoldot_client_init','smoldot_client_destroy']);
+ }
+ const locks=[join(languageView.project,'pubspec.lock'),...['citizen_sdk','tatachat_sdk'].filter(name=>receipt.inputs.sources.some(source=>source.name===name)).map(name=>join(receipt.work,'language-sdk-'+name,'pubspec.lock'))];
+ for(const lock of locks){const text=await readFile(lock,'utf8'),block=text.match(/^  isar_community_flutter_libs:\n([\s\S]*?)(?=^  \S|^sdks:|$)/mu)?.[1];if(!block&&!text.trimStart().startsWith('{'))continue;if(text.trimStart().startsWith('{')&&!JSON.parse(text).packages?.isar_community_flutter_libs)continue;
+  const version=text.trimStart().startsWith('{')?JSON.parse(text).packages?.isar_community_flutter_libs?.version:block.match(/^    version: "([^"]+)"$/mu)?.[1];if(!version)fail('门禁Isar版本不是本仓原锁');
+  const file=join(env.PUB_CACHE,'hosted/pub.dev','isar_community_flutter_libs-'+version,process.platform==='darwin'?'macos/libisar.dylib':'linux/libisar.so');
+  await regular(file);if(await realpath(file)!==file||!file.startsWith(receipt.work+'/'))fail('门禁Isar运行件越界');result.ISAR_CORE_LIB_PATH=file;
+ }
+ if(libraries.length){const paths=[...new Set(libraries.map(dirname))].join(':');result[process.platform==='darwin'?'DYLD_LIBRARY_PATH':'LD_LIBRARY_PATH']=paths;}
+ signal?.throwIfAborted();return result;
 }
