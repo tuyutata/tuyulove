@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "repository": "tuyulove",
+  "github_repository": "tuyutata/tuyulove",
+  "workflows": [
+    "release-android.yml",
+    "release-ios.yml"
+  ],
+  "checks": [
+    "repository-contracts",
+    "flow-isolation",
+    "syntax"
+  ]
+}
