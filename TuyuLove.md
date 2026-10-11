@@ -277,16 +277,16 @@ tuyulove/
 
 #### 正式 GitHub Release 合同（2026-08-25）
 
-- iOS 与 Android Release 分别使用 `tuyulove-ios-v<software_version>` 和
-- iOS 正式资产固定为 `tuyulove-ios.ipa`；GitHub runner 使用 本产品仓的 `IOS_KEY` 与
+- iOS 与 Android Release 分别使用本仓平台前缀、软件版本及准确 Run/Attempt 形成的 Tag。
+- iOS 正式资产固定为 `tuyulove-ios.ipa`；本仓本机发布接口使用控制台交付的 `IOS_KEY` 与
   `APP_PROFILE` 完成 Apple Distribution 签名，并回读验证 `com.tuyulove`。
-- Android 正式资产固定为 `tuyulove-android.zip`，归档内只包含使用 本产品仓 `APP_KEY`
+- Android 正式资产固定为 `tuyulove-android.zip`，归档内只包含本仓本机接口使用 `APP_KEY`
   签名并验签的 APK 与 AAB。
 - 每个 Tag 还固定包含 `release-manifest.json` 和 `SHA256SUMS`。TuyuLove 是 `tuyutata/tuyulove` 公开仓，
   产品沿用现有签名与双重清单合同，不因组织重构切换 GitHub Artifact Attestation；主资产由 GitHub Release `sha256:` 摘要、
   文件尺寸、本地流式 SHA-256、源码 SHA 与双重清单共同验真。Release 只写入
   `software_version`，不创建、读取或传递构建号。
-- GitHub Release 只构建、签名和固化正式资产；App Store 与 Google Play 发布只能由本机
+- GitHub 自动化只构建并交付未签名候选；本机最终确认后才签名并固化正式 Release。App Store 与 Google Play 发布只能由本机
   外部调用方 的独立发布动作执行，禁止 GitHub 保存商店发布凭据或执行商店发布。
 - iOS 与 Android 发布预检只接受各自最新准确 Release、清单、SHA256SUMS 和
   `com.tuyulove` 应用身份。QR_V1 对外绑定的上一版本只允许本端 Release Tag，首发为 `none`；
@@ -595,3 +595,7 @@ iOS 本机编译只生成无签名候选：Flutter 使用 build ios --release --
 本仓 GitHub 门禁接受 actions/checkout 的准确 HTTPS origin（同一仓库地址有或没有 `.git` 后缀），仓库、事件、提交和工作流身份仍逐项校验。
 
 门禁清理接口只对 URL 的路径部分拒绝越界，允许 created 查询中的时间范围分隔符；同文件回归直接执行正式 HTTP 参数校验，覆盖时间范围和越界拒绝。
+
+## 配置需求公开接口
+
+本仓 `scripts/config.mjs` 声明旅行端 Android 的 APP_KEY、iOS 的 IOS_KEY 和 APP_PROFILE，均为本产品独立保密签名材料；现行产品流程没有消费旧控制台的 ASC 或 Google Play 凭据。两条移动端 Workflow 只构建并交付带准确Run/SHA摘要的未签名候选，不读取 Repository Secrets，也不在 GitHub 签名或创建正式Release。本仓 `scripts/publish.mjs` 验真候选、按声明接收控制台瞬时交付的签名材料，在本机运行本仓唯一签名脚本、回读包身份并逐件上传正式资产；历史同类Run/Artifact在最终发布成功后由本仓接口清理。实际签名、发布和密钥迁移尚未执行。
