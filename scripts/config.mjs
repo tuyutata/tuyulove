@@ -7,9 +7,27 @@ export const manifest=Object.freeze({
     "kind": "tuyu",
     "title": "途遇旅行配置",
     "items": [
-      {"environment":"tuyulove-release","name":"APP_KEY","title":"APP_KEY","description":"旅行端 Android 正式签名材料","revealable":false,"accessLevel":"protected","kind":"android-signing"},
-      {"environment":"tuyulove-release","name":"IOS_KEY","title":"IOS_KEY","description":"旅行端 iOS 正式签名证书","revealable":false,"accessLevel":"protected","kind":"ios-signing"},
-      {"environment":"tuyulove-release","name":"APP_PROFILE","title":"APP_PROFILE","description":"旅行端 iOS 正式描述文件","revealable":false,"accessLevel":"protected","kind":"ios-signing"}
+      {
+        "name": "APP_KEY",
+        "description": "安卓应用正式签名材料",
+        "accessLevel": "protected",
+        "kind": "android-signing",
+        "format": "不适用"
+      },
+      {
+        "name": "IOS_KEY",
+        "description": "苹果移动应用正式签名证书",
+        "accessLevel": "protected",
+        "kind": "ios-signing",
+        "format": "不适用"
+      },
+      {
+        "name": "TUYULOVE_PROFILE",
+        "description": "途遇旅行描述文件",
+        "accessLevel": "protected",
+        "kind": "ios-signing",
+        "format": "ios_profile:com.tuyulove"
+      }
     ]
   }
 });
