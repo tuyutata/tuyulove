@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:citizen_sdk/citizen_sdk.dart';
-import 'package:citizen_sdk/src/platform/citizen_sdk_platform.dart';
+import 'package:citizen_sdk/platform/citizen_sdk_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tuyulove/app/app.dart';
@@ -14,17 +14,18 @@ final class _SdkPlatform implements CitizenSdkPlatform {
   @override
   Stream<Object?> get events => _events.stream;
 
+  // 同步固定SDK通道v2夹具；不改变TUYU业务签名协议。
   @override
   Future<Object?> invoke(String method, List<Object?> arguments) async =>
       switch (method) {
         'open' => <Object?>[
-          1,
+          2,
           'locale-session',
           0,
           <Object?>['created', 1],
         ],
         'close' => <Object?>[
-          1,
+          2,
           'locale-session',
           arguments[2],
           <Object?>['disposed'],
@@ -53,7 +54,7 @@ void main() {
 
   test('安装名称按系统语言解析并保留产品身份', () {
     final root = Platform.environment['TUYULOVE_ROOT'];
-    final app = root == null ? Directory.current.path : '$root';
+    final app = root ?? Directory.current.path;
     String source(String path) => File('$app/$path').readAsStringSync();
     for (final platform in ['ios']) {
       final catalog = jsonDecode(

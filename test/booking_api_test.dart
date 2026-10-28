@@ -66,21 +66,21 @@ final class _Merchant implements MerchantApiTransport {
 }
 
 DiscoveryListing listing() => DiscoveryListing(
-  id: 'tli_${'3' * 32}',
-  merchantInstanceId: 'tmi_${'5' * 32}',
-  capability: TravelCapability.hotel,
-  title: '山海酒店',
-  summary: '海边客房',
-  location: '青岛',
+  listingId: 'tli_${'3' * 32}',
+  instanceId: 'tmi_${'5' * 32}',
+  serviceKind: ServiceKind.hotel,
+  listingTitle: '山海酒店',
+  listingSummary: '海边客房',
+  listingLocation: '青岛',
   currency: 'CNY',
   minimumAmount: 68800,
   mediaUrl: null,
   serviceEndpoint: Uri.parse('https://hotel.example'),
-  installationPublicKey: '0x${'6' * 64}',
-  sourceUpdatedAt: DateTime.now().toUtc(),
+  instanceKey: '0x${'6' * 64}',
+  sourceTime: DateTime.now().toUtc(),
   expiresAt: DateTime.now().toUtc().add(const Duration(days: 1)),
   signedPayload: 'e30',
-  signature: '0x${'7' * 128}',
+  payloadSignature: '0x${'7' * 128}',
 );
 
 void main() {

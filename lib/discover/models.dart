@@ -1,73 +1,73 @@
-enum TravelCapability {
+enum ServiceKind {
   hotel,
   restaurant,
   tour,
   ticket;
 
-  static TravelCapability parse(String value) =>
-      TravelCapability.values.firstWhere(
-        (item) => item.name == value,
-        orElse: () => throw const FormatException('旅行服务分类无效'),
-      );
+  static ServiceKind parse(String value) => ServiceKind.values.firstWhere(
+    (item) => item.name == value,
+    orElse: () => throw const FormatException('旅行服务分类无效'),
+  );
 }
 
+/// 发现字段与服务端同词根；Dart使用lowerCamelCase，原始JSON使用snake_case。
 final class DiscoveryListing {
   const DiscoveryListing({
-    required this.id,
-    required this.merchantInstanceId,
-    required this.capability,
-    required this.title,
-    required this.summary,
-    required this.location,
+    required this.listingId,
+    required this.instanceId,
+    required this.serviceKind,
+    required this.listingTitle,
+    required this.listingSummary,
+    required this.listingLocation,
     required this.currency,
     required this.minimumAmount,
     required this.mediaUrl,
     required this.serviceEndpoint,
-    required this.installationPublicKey,
-    required this.sourceUpdatedAt,
+    required this.instanceKey,
+    required this.sourceTime,
     required this.expiresAt,
     required this.signedPayload,
-    required this.signature,
+    required this.payloadSignature,
   });
 
   factory DiscoveryListing.fromJson(Map<String, Object?> json) =>
       DiscoveryListing(
-        id: _string(json, 'listing_id'),
-        merchantInstanceId: _string(json, 'merchant_instance_id'),
-        capability: TravelCapability.parse(_string(json, 'capability')),
-        title: _string(json, 'title'),
-        summary: json['summary'] is String
-            ? json['summary']! as String
+        listingId: _string(json, 'listing_id'),
+        instanceId: _string(json, 'instance_id'),
+        serviceKind: ServiceKind.parse(_string(json, 'service_kind')),
+        listingTitle: _string(json, 'listing_title'),
+        listingSummary: json['listing_summary'] is String
+            ? json['listing_summary']! as String
             : throw const FormatException(),
-        location: json['location'] is String
-            ? json['location']! as String
+        listingLocation: json['listing_location'] is String
+            ? json['listing_location']! as String
             : throw const FormatException(),
         currency: _string(json, 'currency'),
         minimumAmount: _integer(json, 'minimum_amount'),
         mediaUrl: json['media_url'] as String?,
         serviceEndpoint: Uri.parse(_string(json, 'service_endpoint')),
-        installationPublicKey: _string(json, 'installation_public_key'),
-        sourceUpdatedAt: _date(json, 'source_updated_at'),
+        instanceKey: _string(json, 'instance_key'),
+        sourceTime: _date(json, 'source_time'),
         expiresAt: _date(json, 'expires_at'),
         signedPayload: _string(json, 'signed_payload'),
-        signature: _string(json, 'signature'),
+        payloadSignature: _string(json, 'payload_signature'),
       );
 
-  final String id;
-  final String merchantInstanceId;
-  final TravelCapability capability;
-  final String title;
-  final String summary;
-  final String location;
+  final String listingId;
+  final String instanceId;
+  final ServiceKind serviceKind;
+  final String listingTitle;
+  final String listingSummary;
+  final String listingLocation;
   final String currency;
   final int minimumAmount;
   final String? mediaUrl;
   final Uri serviceEndpoint;
-  final String installationPublicKey;
-  final DateTime sourceUpdatedAt;
+  final String instanceKey;
+  final DateTime sourceTime;
   final DateTime expiresAt;
   final String signedPayload;
-  final String signature;
+  final String payloadSignature;
 }
 
 String _string(Map<String, Object?> json, String key) {

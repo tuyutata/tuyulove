@@ -13,7 +13,7 @@ final class DiscoverPage extends StatefulWidget {
 
 final class _DiscoverPageState extends State<DiscoverPage> {
   final _query = TextEditingController();
-  TravelCapability? _capability;
+  ServiceKind? _serviceKind;
 
   @override
   void dispose() {
@@ -26,7 +26,7 @@ final class _DiscoverPageState extends State<DiscoverPage> {
     final strings = AppLocalizations.of(context);
     final controller = context.watch<TravelController>();
     return RefreshIndicator(
-      onRefresh: () => controller.search(_query.text, _capability),
+      onRefresh: () => controller.search(_query.text, _serviceKind),
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -34,20 +34,20 @@ final class _DiscoverPageState extends State<DiscoverPage> {
             controller: _query,
             hintText: strings.searchHint,
             leading: const Icon(Icons.search),
-            onSubmitted: (value) => controller.search(value, _capability),
+            onSubmitted: (value) => controller.search(value, _serviceKind),
           ),
           const SizedBox(height: 12),
-          SegmentedButton<TravelCapability>(
+          SegmentedButton<ServiceKind>(
             emptySelectionAllowed: true,
-            segments: TravelCapability.values
+            segments: ServiceKind.values
                 .map(
                   (item) => ButtonSegment(value: item, label: Text(item.name)),
                 )
                 .toList(growable: false),
-            selected: _capability == null ? const {} : {_capability!},
+            selected: _serviceKind == null ? const {} : {_serviceKind!},
             onSelectionChanged: (values) {
-              setState(() => _capability = values.firstOrNull);
-              controller.search(_query.text, _capability);
+              setState(() => _serviceKind = values.firstOrNull);
+              controller.search(_query.text, _serviceKind);
             },
           ),
           if (controller.busy) const LinearProgressIndicator(),
@@ -64,8 +64,10 @@ final class _DiscoverPageState extends State<DiscoverPage> {
           for (final listing in controller.listings)
             Card(
               child: ListTile(
-                title: Text(listing.title),
-                subtitle: Text('${listing.location}\n${listing.summary}'),
+                title: Text(listing.listingTitle),
+                subtitle: Text(
+                  '${listing.listingLocation}\n${listing.listingSummary}',
+                ),
                 isThreeLine: true,
                 trailing: FilledButton.tonal(
                   onPressed: controller.busy

@@ -53,7 +53,8 @@ final class _ChatPageState extends State<ChatPage> {
                 (conversation) => ChoiceChip(
                   label: Text(conversation.peerTuyuId),
                   selected:
-                      controller.selectedConversation?.id == conversation.id,
+                      controller.selectedConversation?.conversationId ==
+                      conversation.conversationId,
                   onSelected: (_) =>
                       controller.selectConversation(conversation),
                 ),

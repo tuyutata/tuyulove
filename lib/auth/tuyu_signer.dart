@@ -20,5 +20,6 @@ final class CitizenSdkTuyuSigner implements TuyuSigner {
     required String accountId,
     required Uint8List message,
   }) async =>
-      (await _signing.sign(accountId: accountId, payload: message)).bytes;
+      (await _signing.sign(accountId: accountId, payload: message).result)
+          .bytes;
 }

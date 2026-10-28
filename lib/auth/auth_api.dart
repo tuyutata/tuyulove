@@ -12,7 +12,7 @@ abstract interface class AuthApi {
 final class TuyuAuthApi implements AuthApi {
   const TuyuAuthApi(this._transport);
 
-  static const String audience = 'tuyulove';
+  static const String productId = 'tuyulove';
   final SecureApiTransport _transport;
 
   @override
@@ -23,14 +23,14 @@ final class TuyuAuthApi implements AuthApi {
     final json = await _transport.post('/v1/auth/challenge', {
       'tuyu_id': tuyuId,
       'device_id': deviceId,
-      'audience': audience,
+      'product_id': productId,
     });
     return AuthChallenge(
       challengeId: _string(json, 'challenge_id'),
       tuyuId: _string(json, 'tuyu_id'),
       accountId: _string(json, 'account_id'),
       keyRevision: _integer(json, 'key_revision'),
-      audience: _string(json, 'audience'),
+      productId: _string(json, 'product_id'),
       operation: _integer(json, 'operation'),
       deviceId: _string(json, 'device_id'),
       expiresAt: _date(json, 'expires_at'),
@@ -45,14 +45,14 @@ final class TuyuAuthApi implements AuthApi {
       'tuyu_id': challenge.tuyuId,
       'account_id': challenge.accountId,
       'key_revision': challenge.keyRevision,
-      'audience': challenge.audience,
+      'product_id': challenge.productId,
       'operation': challenge.operation,
       'device_id': challenge.deviceId,
       'expires_at': challenge.expiresAt.millisecondsSinceEpoch,
       'signature': proof.signature,
     });
     return AuthSession(
-      token: _string(json, 'session_token'),
+      sessionToken: _string(json, 'session_token'),
       tuyuId: _string(json, 'tuyu_id'),
       expiresAt: _date(json, 'expires_at'),
     );
@@ -70,13 +70,11 @@ final class TuyuAuthApi implements AuthApi {
     return value;
   }
 
+  // 当前云端合同只接收整数毫秒，不以日期字符串兼容第二套格式。
   static DateTime _date(Map<String, Object?> json, String key) {
     final value = json[key];
     if (value is int) {
       return DateTime.fromMillisecondsSinceEpoch(value, isUtc: true);
-    }
-    if (value is String) {
-      return DateTime.parse(value).toUtc();
     }
     throw FormatException('字段类型无效：$key');
   }

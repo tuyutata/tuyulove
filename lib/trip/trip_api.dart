@@ -6,8 +6,8 @@ abstract interface class TripApi {
   Future<List<TripPost>> list();
   Future<TripPost> publish(
     String token, {
-    required String title,
-    required String content,
+    required String postTitle,
+    required String postBody,
   });
 }
 
@@ -33,14 +33,14 @@ final class TuyuTripApi implements TripApi {
   @override
   Future<TripPost> publish(
     String token, {
-    required String title,
-    required String content,
+    required String postTitle,
+    required String postBody,
   }) async {
     final response = await _client.authorizedPost('/v1/trips', {
-      'title': title,
-      'content': content,
+      'post_title': postTitle,
+      'post_body': postBody,
       'media_keys': <String>[],
-      'idempotency_key': randomId('tpi'),
+      'request_key': randomId('tpi'),
     }, token: token);
     final value = response['trip'];
     if (value is! Map) throw const FormatException('游记记录格式无效');

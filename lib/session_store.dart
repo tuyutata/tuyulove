@@ -36,7 +36,7 @@ final class SecureSessionStore implements SessionStore {
 
   @override
   Future<void> save(AuthSession session) async {
-    await _storage.write(key: _tokenKey, value: session.token);
+    await _storage.write(key: _tokenKey, value: session.sessionToken);
     await _storage.write(
       key: _expiryKey,
       value: session.expiresAt.toIso8601String(),

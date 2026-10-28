@@ -1,25 +1,25 @@
 final class ChatConversation {
   const ChatConversation({
-    required this.id,
+    required this.conversationId,
     required this.peerTuyuId,
     required this.updatedAt,
   });
 
   factory ChatConversation.fromJson(Map<String, Object?> json) =>
       ChatConversation(
-        id: _string(json, 'conversation_id'),
+        conversationId: _string(json, 'conversation_id'),
         peerTuyuId: _string(json, 'peer_tuyu_id'),
         updatedAt: _date(json, 'updated_at'),
       );
 
-  final String id;
+  final String conversationId;
   final String peerTuyuId;
   final DateTime updatedAt;
 }
 
 final class ChatMessage {
   const ChatMessage({
-    required this.id,
+    required this.messageId,
     required this.conversationId,
     required this.senderTuyuId,
     required this.sequence,
@@ -28,7 +28,7 @@ final class ChatMessage {
   });
 
   factory ChatMessage.fromJson(Map<String, Object?> json) => ChatMessage(
-    id: _string(json, 'message_id'),
+    messageId: _string(json, 'message_id'),
     conversationId: _string(json, 'conversation_id'),
     senderTuyuId: _string(json, 'sender_tuyu_id'),
     sequence: _integer(json, 'sequence'),
@@ -36,7 +36,7 @@ final class ChatMessage {
     createdAt: _date(json, 'created_at'),
   );
 
-  final String id;
+  final String messageId;
   final String conversationId;
   final String senderTuyuId;
   final int sequence;

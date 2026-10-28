@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -23,7 +24,7 @@ final class _Api implements AuthApi {
       tuyuId: tuyuId,
       accountId: '0x${'11' * 32}',
       keyRevision: 1,
-      audience: 'tuyulove',
+      productId: 'tuyulove',
       operation: 1,
       deviceId: deviceId,
       expiresAt: now.add(const Duration(minutes: 5)),
@@ -33,7 +34,7 @@ final class _Api implements AuthApi {
   @override
   Future<AuthSession> createSession(AuthProof proof) async {
     return AuthSession(
-      token: 'session',
+      sessionToken: 'session',
       tuyuId: proof.challenge.tuyuId,
       expiresAt: now.add(const Duration(hours: 1)),
     );
@@ -52,26 +53,49 @@ final class _CitizenSigning implements CitizenSigning {
   String? accountId;
   Uint8List? payload;
 
+  Completer<CitizenWalletSignature>? pending;
+  Object? failure;
+  int calls = 0;
+
   @override
-  Future<CitizenWalletSignature> sign({
+  CitizenSdkOperation<CitizenWalletSignature> sign({
     required String accountId,
     required Uint8List payload,
-  }) async {
+  }) {
+    calls++;
     this.accountId = accountId;
     this.payload = Uint8List.fromList(payload);
-    return CitizenWalletSignature(accountId: accountId, bytes: Uint8List(64));
+    return CitizenSdkOperation(
+      operationId: 'sign-test',
+      result:
+          pending?.future ??
+          (failure == null
+              ? Future.value(
+                  CitizenWalletSignature(
+                    accountId: accountId,
+                    bytes: Uint8List(64),
+                  ),
+                )
+              : Future<CitizenWalletSignature>.error(failure!)),
+      cancel: () async => false,
+    );
   }
 
   @override
-  Future<CitizenQrSigned> signQrRequest(String signRequest) =>
+  CitizenSdkOperation<CitizenQrReview> reviewQrRequest(String signRequest) =>
       throw UnimplementedError();
 
   @override
-  Future<CitizenSigningOutcome> begin(CitizenSigningIntent intent) =>
+  CitizenSdkOperation<CitizenQrSigned> signQrRequest(CitizenQrReview review) =>
       throw UnimplementedError();
 
   @override
-  Future<CitizenSigningCompleted> consumeExternalSignature({
+  CitizenSdkOperation<CitizenSigningOutcome> begin(
+    CitizenSigningIntent intent,
+  ) => throw UnimplementedError();
+
+  @override
+  CitizenSdkOperation<CitizenSigningCompleted> consumeExternalSignature({
     required String sessionId,
     required String response,
   }) => throw UnimplementedError();
@@ -110,6 +134,40 @@ void main() {
     }
   });
 
+  test('签名只等待SDK真实结果，不重复提交或提前完成', () async {
+    final signing = _CitizenSigning()
+      ..pending = Completer<CitizenWalletSignature>();
+    final payload = Uint8List.fromList([1, 2, 3]);
+    var completed = false;
+    final result = CitizenSdkTuyuSigner(signing)
+        .sign(accountId: '0x${'11' * 32}', message: payload)
+        .then((bytes) {
+          completed = true;
+          return bytes;
+        });
+    await Future<void>.delayed(Duration.zero);
+    expect(completed, isFalse);
+    expect(signing.calls, 1);
+    final expected = Uint8List.fromList(List.filled(64, 7));
+    signing.pending!.complete(
+      CitizenWalletSignature(accountId: signing.accountId!, bytes: expected),
+    );
+    expect(await result, expected);
+    expect(signing.payload, payload);
+    expect(signing.calls, 1);
+  });
+
+  test('SDK签名真实失败原样传播且只请求一次', () async {
+    final error = StateError('fixture signing failed');
+    final signing = _CitizenSigning()..failure = error;
+    await expectLater(
+      CitizenSdkTuyuSigner(signing)
+          .sign(accountId: '0x${'11' * 32}', message: Uint8List.fromList([1])),
+      throwsA(same(error)),
+    );
+    expect(signing.calls, 1);
+  });
+
   test('completes direct local-signature login', () async {
     final now = DateTime.utc(2026, 8, 24);
     final store = _Store();
@@ -121,7 +179,7 @@ void main() {
     );
     await controller.login('TUYU-1');
     expect(controller.status, AuthStatus.authenticated);
-    expect(store.saved?.token, 'session');
+    expect(store.saved?.sessionToken, 'session');
   });
 
   test('does not start login for an empty Tuyu ID', () async {

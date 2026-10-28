@@ -2,7 +2,7 @@ import 'package:tuyulove/discover/models.dart';
 
 final class MerchantQuote {
   const MerchantQuote({
-    required this.id,
+    required this.quoteId,
     required this.listing,
     required this.quantity,
     required this.amount,
@@ -10,7 +10,7 @@ final class MerchantQuote {
     required this.expiresAt,
   });
 
-  final String id;
+  final String quoteId;
   final DiscoveryListing listing;
   final int quantity;
   final int amount;
@@ -20,13 +20,13 @@ final class MerchantQuote {
 
 final class MerchantBooking {
   const MerchantBooking({
-    required this.id,
+    required this.bookingId,
     required this.quoteId,
     required this.status,
     required this.createdAt,
   });
 
-  final String id;
+  final String bookingId;
   final String quoteId;
   final String status;
   final DateTime createdAt;

@@ -630,3 +630,19 @@ LOCAL_BUILD_SOURCE在注册编译回归前完成初始化；编译正文保持�
 
 本产品配置项统一为name、description、accessLevel、kind、format五个必填字段；不适用规则明确填写“不适用”。name严格使用两组大写字母和一个下划线，同名共用控制台唯一值，当前页仅汇总实际声明的使用产品。操作列固定写入/更换、查看、删除；保密查看保留生物识别。现有配置消费者随声明同步改名，官方工具/API字段保持官方名称，不新增旧名兼容或配置副本。
 描述文件使用TUYULOVE_PROFILE，format绑定真实iOS Bundle身份；不能将其它产品描述文件冒认成本产品已配置。
+
+
+## 第一方字段与服务端唯一数据源
+
+旅行端接收途遇服务端的唯一snake_case字段，Dart成员使用相同业务词根的lowerCamelCase，不保留旧键回退、影子字段或人工翻译层。发现模型使用listingId、instanceId、serviceKind、listingTitle、listingSummary、listingLocation、instanceKey、sourceTime、payloadSignature；游记使用tripId、authorId、postTitle、postBody；登录产品使用productId，会话使用sessionToken。报价、预订、聊天消费模型的身份分别使用quoteId、bookingId、conversationId、messageId。
+
+签名证据仍按原始载荷逐字节验签并核对投影，固定签名原文字段、SCALE顺序、域、算法和报价/预订接口不改写。币种、价格、媒体地址和服务地址由服务端原始签名载荷提供，不新增本地权威副本。云端时间字段按当前API的整数毫秒严格接收，不兼容另一种日期字符串格式。
+
+安全存储条目、已有设备身份和固定共享账户合同保持，不清空或重建手机数据。
+
+
+### 第4步既有回归阻塞收口
+
+CitizenSDK直接依赖固定0e07a360813948830e39168edcc4dff88922dd8a，签名通过CitizenSdkOperation.result等待真实结果；不改账户、签名字节或TUYU摘要构造。测试同步公开库路径，覆盖延迟和真实失败，不增加签名实现。
+
+语言页面的SDK测试传输按固定SDK通道v2构造；TUYU业务签名协议不变。

@@ -59,8 +59,8 @@ final class _TripPageState extends State<TripPage> {
           for (final trip in controller.trips)
             Card(
               child: ListTile(
-                title: Text(trip.title),
-                subtitle: Text('${trip.authorTuyuId}\n${trip.content}'),
+                title: Text(trip.postTitle),
+                subtitle: Text('${trip.authorId}\n${trip.postBody}'),
                 isThreeLine: true,
               ),
             ),

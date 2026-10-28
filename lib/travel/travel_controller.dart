@@ -41,18 +41,16 @@ final class TravelController extends ChangeNotifier {
     final values = await Future.wait<Object>([
       _discovery.search(),
       _trip.list(),
-      _chat.conversations(_session.token),
+      _chat.conversations(_session.sessionToken),
     ]);
     listings = values[0] as List<DiscoveryListing>;
     trips = values[1] as List<TripPost>;
     conversations = values[2] as List<ChatConversation>;
   });
 
-  Future<void> search(String query, TravelCapability? capability) => _run(
-    () async {
-      listings = await _discovery.search(query: query, capability: capability);
-    },
-  );
+  Future<void> search(String query, ServiceKind? serviceKind) => _run(() async {
+    listings = await _discovery.search(query: query, serviceKind: serviceKind);
+  });
 
   Future<void> requestQuote(DiscoveryListing listing) => _run(() async {
     currentBooking = null;
@@ -72,36 +70,52 @@ final class TravelController extends ChangeNotifier {
 
   Future<void> startConversation(String peerTuyuId) => _run(() async {
     final conversation = await _chat.createConversation(
-      _session.token,
+      _session.sessionToken,
       peerTuyuId.trim(),
     );
     selectedConversation = conversation;
-    conversations = await _chat.conversations(_session.token);
-    chatMessages = await _chat.messages(_session.token, conversation.id, 0);
+    conversations = await _chat.conversations(_session.sessionToken);
+    chatMessages = await _chat.messages(
+      _session.sessionToken,
+      conversation.conversationId,
+      0,
+    );
   });
 
   Future<void> selectConversation(ChatConversation conversation) =>
       _run(() async {
         selectedConversation = conversation;
-        chatMessages = await _chat.messages(_session.token, conversation.id, 0);
+        chatMessages = await _chat.messages(
+          _session.sessionToken,
+          conversation.conversationId,
+          0,
+        );
       });
 
   Future<void> sendMessage(String content) => _run(() async {
     final conversation = selectedConversation;
     if (conversation == null || content.trim().isEmpty) return;
-    await _chat.send(_session.token, conversation.id, content.trim());
+    await _chat.send(
+      _session.sessionToken,
+      conversation.conversationId,
+      content.trim(),
+    );
     final after = chatMessages.isEmpty ? 0 : chatMessages.last.sequence;
     chatMessages = [
       ...chatMessages,
-      ...await _chat.messages(_session.token, conversation.id, after),
+      ...await _chat.messages(
+        _session.sessionToken,
+        conversation.conversationId,
+        after,
+      ),
     ];
   });
 
-  Future<void> publishTrip(String title, String content) => _run(() async {
+  Future<void> publishTrip(String postTitle, String postBody) => _run(() async {
     await _trip.publish(
-      _session.token,
-      title: title.trim(),
-      content: content.trim(),
+      _session.sessionToken,
+      postTitle: postTitle.trim(),
+      postBody: postBody.trim(),
     );
     trips = await _trip.list();
   });

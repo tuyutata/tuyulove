@@ -52,7 +52,7 @@ final class DirectMerchantBookingApi implements BookingApi {
         jsonEncode({
           'action': 'quote',
           'request_id': requestId,
-          'listing_id': listing.id,
+          'listing_id': listing.listingId,
           'quantity': quantity,
           'requested_for': requestedFor.toUtc().toIso8601String(),
         }),
@@ -66,7 +66,7 @@ final class DirectMerchantBookingApi implements BookingApi {
     );
     final decoded = await _verifyResponse(response, listing);
     if (decoded['kind'] != 'quote' ||
-        decoded['listing_id'] != listing.id ||
+        decoded['listing_id'] != listing.listingId ||
         decoded['quantity'] != quantity) {
       throw const FormatException('商家报价约束无效');
     }
@@ -75,7 +75,7 @@ final class DirectMerchantBookingApi implements BookingApi {
       throw const FormatException('商家报价已经过期');
     }
     return MerchantQuote(
-      id: _string(decoded, 'quote_id'),
+      quoteId: _string(decoded, 'quote_id'),
       listing: listing,
       quantity: quantity,
       amount: _integer(decoded, 'amount'),
@@ -98,8 +98,8 @@ final class DirectMerchantBookingApi implements BookingApi {
         jsonEncode({
           'action': 'booking',
           'request_id': requestId,
-          'listing_id': quote.listing.id,
-          'quote_id': quote.id,
+          'listing_id': quote.listing.listingId,
+          'quote_id': quote.quoteId,
         }),
       ),
     );
@@ -111,12 +111,12 @@ final class DirectMerchantBookingApi implements BookingApi {
           idempotencyKey: requestId,
         );
     final decoded = await _verifyResponse(response, quote.listing);
-    if (decoded['kind'] != 'booking' || decoded['quote_id'] != quote.id) {
+    if (decoded['kind'] != 'booking' || decoded['quote_id'] != quote.quoteId) {
       throw const FormatException('商家预订约束无效');
     }
     return MerchantBooking(
-      id: _string(decoded, 'booking_id'),
-      quoteId: quote.id,
+      bookingId: _string(decoded, 'booking_id'),
+      quoteId: quote.quoteId,
       status: _string(decoded, 'status'),
       createdAt: _date(decoded, 'created_at'),
     );
@@ -139,7 +139,7 @@ final class DirectMerchantBookingApi implements BookingApi {
     );
     final signature = hexToBytes(_string(response, 'signature'));
     if (!await _verifier.verify(
-      publicKey: hexToBytes(listing.installationPublicKey),
+      publicKey: hexToBytes(listing.instanceKey),
       payload: payload,
       signature: signature,
     )) {

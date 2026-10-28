@@ -1,9 +1,9 @@
 final class TripPost {
   const TripPost({
-    required this.id,
-    required this.authorTuyuId,
-    required this.title,
-    required this.content,
+    required this.tripId,
+    required this.authorId,
+    required this.postTitle,
+    required this.postBody,
     required this.mediaKeys,
     required this.createdAt,
   });
@@ -14,10 +14,10 @@ final class TripPost {
       throw const FormatException('游记媒体字段无效');
     }
     return TripPost(
-      id: _string(json, 'trip_id'),
-      authorTuyuId: _string(json, 'author_tuyu_id'),
-      title: _string(json, 'title'),
-      content: _string(json, 'content'),
+      tripId: _string(json, 'trip_id'),
+      authorId: _string(json, 'author_id'),
+      postTitle: _string(json, 'post_title'),
+      postBody: _string(json, 'post_body'),
       mediaKeys: media.cast<String>(),
       createdAt: DateTime.fromMillisecondsSinceEpoch(
         _integer(json, 'created_at'),
@@ -26,10 +26,10 @@ final class TripPost {
     );
   }
 
-  final String id;
-  final String authorTuyuId;
-  final String title;
-  final String content;
+  final String tripId;
+  final String authorId;
+  final String postTitle;
+  final String postBody;
   final List<String> mediaKeys;
   final DateTime createdAt;
 }

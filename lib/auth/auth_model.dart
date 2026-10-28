@@ -4,7 +4,7 @@ final class AuthChallenge {
     required this.tuyuId,
     required this.accountId,
     required this.keyRevision,
-    required this.audience,
+    required this.productId,
     required this.operation,
     required this.deviceId,
     required this.expiresAt,
@@ -14,7 +14,7 @@ final class AuthChallenge {
   final String tuyuId;
   final String accountId;
   final int keyRevision;
-  final String audience;
+  final String productId;
   final int operation;
   final String deviceId;
   final DateTime expiresAt;
@@ -28,11 +28,11 @@ final class AuthProof {
 
 final class AuthSession {
   const AuthSession({
-    required this.token,
+    required this.sessionToken,
     required this.tuyuId,
     required this.expiresAt,
   });
-  final String token;
+  final String sessionToken;
   final String tuyuId;
   final DateTime expiresAt;
 }

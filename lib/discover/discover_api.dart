@@ -9,7 +9,7 @@ import 'package:tuyulove/shared/bytes.dart';
 abstract interface class DiscoveryApi {
   Future<List<DiscoveryListing>> search({
     String query = '',
-    TravelCapability? capability,
+    ServiceKind? serviceKind,
   });
 }
 
@@ -44,13 +44,13 @@ final class TuyuDiscoveryApi implements DiscoveryApi {
   @override
   Future<List<DiscoveryListing>> search({
     String query = '',
-    TravelCapability? capability,
+    ServiceKind? serviceKind,
   }) async {
     final document = await _client.publicGet(
       '/v1/catalog',
       query: {
         if (query.trim().isNotEmpty) 'q': query.trim(),
-        if (capability != null) 'capability': capability.name,
+        if (serviceKind != null) 'service_kind': serviceKind.name,
         'limit': 30,
       },
     );
@@ -77,26 +77,26 @@ final class TuyuDiscoveryApi implements DiscoveryApi {
       if (decoded is! Map) throw const FormatException();
       final json = decoded.map((key, value) => MapEntry(key.toString(), value));
       final matches =
-          json['listing_id'] == listing.id &&
-          json['merchant_instance_id'] == listing.merchantInstanceId &&
-          json['capability'] == listing.capability.name &&
-          json['title'] == listing.title &&
-          json['summary'] == listing.summary &&
-          json['location'] == listing.location &&
+          json['listing_id'] == listing.listingId &&
+          json['merchant_instance_id'] == listing.instanceId &&
+          json['capability'] == listing.serviceKind.name &&
+          json['title'] == listing.listingTitle &&
+          json['summary'] == listing.listingSummary &&
+          json['location'] == listing.listingLocation &&
           json['currency'] == listing.currency &&
           json['minimum_amount'] == listing.minimumAmount &&
           json['media_url'] == listing.mediaUrl &&
           json['service_endpoint'] == listing.serviceEndpoint.toString() &&
           json['source_updated_at'] ==
-              listing.sourceUpdatedAt.millisecondsSinceEpoch &&
+              listing.sourceTime.millisecondsSinceEpoch &&
           json['expires_at'] == listing.expiresAt.millisecondsSinceEpoch;
       if (!matches ||
           listing.serviceEndpoint.scheme != 'https' ||
           !listing.expiresAt.isAfter(DateTime.now().toUtc()) ||
           !await _verifier.verify(
-            publicKey: hexToBytes(listing.installationPublicKey),
+            publicKey: hexToBytes(listing.instanceKey),
             payload: Uint8List.fromList(payload),
-            signature: hexToBytes(listing.signature),
+            signature: hexToBytes(listing.payloadSignature),
           )) {
         throw const FormatException();
       }

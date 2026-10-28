@@ -10,7 +10,7 @@ Uint8List buildTuyuLoginDigest(AuthChallenge challenge) {
     scaleString(challenge.tuyuId),
     uint64LittleEndian(challenge.keyRevision),
     scaleString(challenge.accountId),
-    scaleString(challenge.audience),
+    scaleString(challenge.productId),
     scaleString(challenge.challengeId),
     scaleString(challenge.deviceId),
     uint64LittleEndian(challenge.expiresAt.millisecondsSinceEpoch),

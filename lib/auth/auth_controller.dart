@@ -104,7 +104,7 @@ final class AuthController extends ChangeNotifier
   ) {
     if (challenge.tuyuId != tuyuId ||
         challenge.deviceId != deviceId ||
-        challenge.audience != TuyuAuthApi.audience ||
+        challenge.productId != TuyuAuthApi.productId ||
         challenge.operation != 1 ||
         !challenge.expiresAt.isAfter(_clock())) {
       throw const FormatException('认证挑战约束无效');

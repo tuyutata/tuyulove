@@ -17,7 +17,7 @@ final class BookingPage extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       children: [
         Text(
-          quote.listing.title,
+          quote.listing.listingTitle,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: 12),
@@ -35,7 +35,7 @@ final class BookingPage extends StatelessWidget {
           Card(
             child: ListTile(
               leading: const Icon(Icons.verified_outlined),
-              title: Text('${strings.bookingId}: ${booking.id}'),
+              title: Text('${strings.bookingId}: ${booking.bookingId}'),
               subtitle: Text('${strings.bookingStatus}: ${booking.status}'),
             ),
           ),

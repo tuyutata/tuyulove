@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tuyulove/discover/discover_api.dart';
+import 'package:tuyulove/discover/models.dart';
 import 'package:tuyulove/network/secure_api_client.dart';
 
 final class _Transport implements PublicApiTransport {
@@ -48,12 +49,23 @@ Map<String, Object?> listing() {
     'expires_at': expiresAt,
   };
   return {
-    ...payload,
-    'installation_public_key': '0x${'3' * 64}',
+    'listing_id': payload['listing_id'],
+    'instance_id': payload['merchant_instance_id'],
+    'service_kind': payload['capability'],
+    'listing_title': payload['title'],
+    'listing_summary': payload['summary'],
+    'listing_location': payload['location'],
+    'currency': payload['currency'],
+    'minimum_amount': payload['minimum_amount'],
+    'media_url': payload['media_url'],
+    'service_endpoint': payload['service_endpoint'],
+    'source_time': updatedAt,
+    'expires_at': expiresAt,
+    'instance_key': '0x${'3' * 64}',
     'signed_payload': base64Url
         .encode(utf8.encode(jsonEncode(payload)))
         .replaceAll('=', ''),
-    'signature': '0x${'4' * 128}',
+    'payload_signature': '0x${'4' * 128}',
   };
 }
 
@@ -63,13 +75,13 @@ void main() {
     () async {
       final api = TuyuDiscoveryApi(_Transport(listing()), _Verifier(true));
       final values = await api.search(query: '山海');
-      expect(values.single.title, '山海酒店');
+      expect(values.single.listingTitle, '山海酒店');
       expect(values.single.serviceEndpoint, Uri.parse('https://hotel.example'));
     },
   );
 
   test('rejects a tampered or unverified discovery listing', () async {
-    final tampered = listing()..['title'] = '被修改的标题';
+    final tampered = listing()..['listing_title'] = '被修改的标题';
     await expectLater(
       TuyuDiscoveryApi(_Transport(tampered), _Verifier(true)).search(),
       throwsFormatException,
@@ -78,5 +90,11 @@ void main() {
       TuyuDiscoveryApi(_Transport(listing()), _Verifier(false)).search(),
       throwsFormatException,
     );
+  });
+
+  test('缺少规范字段时不读取旧字段作为回退', () {
+    final old = listing()..remove('instance_id');
+    old['merchant_instance_id'] = 'tmi_${'2' * 32}';
+    expect(() => DiscoveryListing.fromJson(old), throwsFormatException);
   });
 }
