@@ -1,45 +1,23 @@
-import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 
 import 'package:citizen_sdk/citizen_sdk.dart';
-import 'package:citizen_sdk/platform/citizen_sdk_platform.dart';
+import 'package:citizen_sdk/test/platform/fixture.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tuyulove/app/app.dart';
 
-final class _SdkPlatform implements CitizenSdkPlatform {
-  final StreamController<Object?> _events = StreamController.broadcast();
-
-  @override
-  Stream<Object?> get events => _events.stream;
-
-  // 同步固定SDK通道v2夹具；不改变TUYU业务签名协议。
-  @override
-  Future<Object?> invoke(String method, List<Object?> arguments) async =>
-      switch (method) {
-        'open' => <Object?>[
-          2,
-          'locale-session',
-          0,
-          <Object?>['created', 1],
-        ],
-        'close' => <Object?>[
-          2,
-          'locale-session',
-          arguments[2],
-          <Object?>['disposed'],
-        ],
-        _ => throw UnsupportedError(method),
-      };
-}
-
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  final fixture = CitizenSdkTestFixture();
+  setUp(fixture.install);
+  tearDown(fixture.dispose);
   test('Android generated names use the AGP Variant API', () {
     final root =
         Platform.environment['TUYULOVE_ROOT'] ?? Directory.current.path;
-    final script = File('$root/android/app/build.gradle.kts')
-        .readAsStringSync();
+    final script = File(
+      '$root/android/app/build.gradle.kts',
+    ).readAsStringSync();
     expect(
       script,
       contains('abstract class GenerateAppNameResources : DefaultTask'),
@@ -99,13 +77,20 @@ void main() {
   testWidgets('follows the device Chinese locale', (tester) async {
     tester.binding.platformDispatcher.localesTestValue = const [Locale('zh')];
     addTearDown(tester.binding.platformDispatcher.clearLocalesTestValue);
-    CitizenSdkPlatform.instance = _SdkPlatform();
-    addTearDown(() => CitizenSdkPlatform.instance = null);
-    final sdk = await CitizenSdk.open(
-      modules: CitizenSdkModules.wallet | CitizenSdkModules.signing,
-    );
-    await tester.pumpWidget(TuyuLoveApp(serviceEndpoint: '', citizenSdk: sdk));
-    await tester.pumpAndSettle();
-    expect(find.text('途遇号'), findsOneWidget);
+    final sdk = (await tester.runAsync(
+      () => CitizenSdk.open(
+        modules: CitizenSdkModules.wallet | CitizenSdkModules.signing,
+      ),
+    ))!;
+    try {
+      await tester.pumpWidget(
+        TuyuLoveApp(serviceEndpoint: '', citizenSdk: sdk),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('途遇号'), findsOneWidget);
+    } finally {
+      await tester.runAsync(sdk.close);
+      await tester.pumpWidget(const SizedBox.shrink());
+    }
   });
 }

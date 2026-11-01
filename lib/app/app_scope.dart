@@ -48,7 +48,7 @@ final class _AppScopeState extends State<AppScope> {
         : TuyuAuthApi(_client);
     _controller = AuthController(
       api: api,
-      signer: CitizenSdkTuyuSigner(widget.citizenSdk.signing),
+      signer: CitizenSdkTuyuSigner(widget.citizenSdk),
       sessionStore: SecureSessionStore(),
     );
   }

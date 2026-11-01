@@ -251,7 +251,7 @@ tuyulove/
 
 - TuyuLove只构造TUYU登录和商家业务载荷；账户秘密、设备认证、sr25519签名与验签由CitizenSDK执行。
 - 产品不保存、导入、导出或解密MiniSecret，不建立本地Rust FFI、硬件金库或第二轻节点。
-- 当前直接依赖锁定 `crcfrcn/citizensdk` 的根包及提交 `0c442b4065ff1577e235cba76978749827d9f575`，声明与锁的ref/resolved-ref一致；离线原件保持该固定Git来源。
+- 当前直接依赖的根包、准确版本与Git提交只由pubspec.yaml和pubspec.lock定义；声明与锁保持同一来源，原锁闭包不额外升级。
 
 ##### 当前明确不包含
 
@@ -615,7 +615,7 @@ GitHub接口使用普通参数和已授权令牌，返回本仓既有版本计�
 
 CitizenSDK来源由本产品pubspec.yaml与pubspec.lock的固定Git提交共同定义，SDK的完整包回执必须对应同一SHA。调用方以CITIZENSDK_PACKAGE交付已授权取得的原ZIP、JSON和sha256三件目录，该普通输入原样通过Node重入和资源环境；本产品只调用锁定SDK的scripts/build.mjs公开consume与verifyConsumer入口。校验、解包和四宿主完整性由SDK唯一实现，应用不维护SDK依赖计划、Cargo闭包或第二编译器，不从邻仓、旧工作目录或另一个来源补件。
 
-实际Pub解析使用本轮工程中唯一.source-packages/citizen_sdk视图；构建副本的直接依赖版本读取交付包pubspec，正式Git声明及原锁保持。普通业务仍只调用包根CitizenSdk公开门面，钱包、链、签名、安全存储与认证职责不变。实际运行、链接与设备验收以所属平台真实结果为准。
+实际Pub解析使用本轮工程中唯一.source-packages/citizen_sdk视图；构建副本的直接依赖版本读取交付包pubspec，不在脚本另设SDK 1.0.0门禁，正式Git声明及原锁保持。普通业务直接调用包根CitizenSdk公开接口，钱包、链、签名、安全存储与认证职责不变。实际运行、链接与设备验收以所属平台真实结果为准。签名接线测试复用SDK公开CitizenSdkTestFixture及同轮真实Core/SQLite测试库，实际创建临时钱包、签名并由公开接口验签；App登录等待只替换本产品TuyuSigner角色，语言Widget使用真实SDK会话。旧CitizenSigning与CitizenSdkPlatform替身删除；测试库由调用方交付，依赖采用已通过SDK完整自动化的同一提交，消费验证由本产品独立执行。
 
 离线准备通过普通输入交付完整SDK，不临时访问网络、下载工具或执行SDK编译。原版本新提交与完整产物就绪前不修改依赖锁中的提交号；该输入属于本产品公开流程数据，不依赖控制台私有库存。
 
@@ -643,11 +643,15 @@ LOCAL_BUILD_SOURCE在注册编译回归前完成初始化；编译正文保持�
 
 ### 第4步既有回归阻塞收口
 
-CitizenSDK直接依赖固定0e07a360813948830e39168edcc4dff88922dd8a，签名通过CitizenSdkOperation.result等待真实结果；不改账户、签名字节或TUYU摘要构造。测试同步公开库路径，覆盖延迟和真实失败，不增加签名实现。
+CitizenSDK直接依赖采用声明及原锁中的同一成功提交，签名通过CitizenSdkOperation.result等待真实结果；不改账户、签名字节或TUYU摘要构造。测试同步公开库路径，覆盖延迟和真实失败，不增加签名实现。
 
-语言页面的SDK测试传输按固定SDK通道v2构造；TUYU业务签名协议不变。
+语言页面测试通过SDK公开物理资源夹具打开真实Core会话；TUYU业务签名协议不变。
 
 
 ## 本机编译资源与版本来源
 
 本机compile PLATFORM直接复用execute的既有offline:true资源分支，按本产品原锁从已有本地资源装配，不进入GitHub下载或远程Git分支；缺件沿原离线错误返回。编译输出、消费期间持有现场、取消及EOF清理保持；控制台任务号不传入产品，自动化入口不受此本机选项影响。
+
+CitizenSDK 2.0接口直接通过同一个CitizenSdk调用，旧chain/wallet/signing分组对象删除；Android使用FlutterFragmentActivity并显式登记CitizenSdkPlugin系统资源。声明与原锁已统一到SDK自身鹿鹿及完整自动化通过的同一提交；消费方只通过公开接口接入并独立验证。
+
+本机编译回执通过signing列表交付本产品Apple产物中的实际代码目标及其已有签名权限，安装器按清单通用签名，不推定本产品目录或功能。权限读取、清单生成归本产品build.mjs，临时plist仅在本轮工作现场；Android交付空清单。原独立入口、依赖准备、编译阶段及签名权限语义保持。

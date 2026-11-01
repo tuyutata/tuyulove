@@ -28,7 +28,7 @@ final class CitizenSdkDiscoverySignatureVerifier
     required Uint8List publicKey,
     required Uint8List payload,
     required Uint8List signature,
-  }) => CitizenSigning.verify(
+  }) => CitizenSdk.verify(
     accountId: bytesToHex(publicKey),
     signature: signature,
     payload: payload,

@@ -11,15 +11,15 @@ abstract interface class TuyuSigner {
 
 /// TuyuLove只构造业务载荷；账户秘密、设备认证与sr25519签名全部归CitizenSDK。
 final class CitizenSdkTuyuSigner implements TuyuSigner {
-  const CitizenSdkTuyuSigner(this._signing);
+  const CitizenSdkTuyuSigner(this._sdk);
 
-  final CitizenSigning _signing;
+  final CitizenSdk _sdk;
 
   @override
   Future<Uint8List> sign({
     required String accountId,
     required Uint8List message,
   }) async =>
-      (await _signing.sign(accountId: accountId, payload: message).result)
+      (await _sdk.sign(accountId: accountId, payload: message).result)
           .bytes;
 }
