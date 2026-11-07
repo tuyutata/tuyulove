@@ -247,7 +247,7 @@ const osPlatform=platform=>platform.includes('linux-')?'linux':platform.replace(
 export function lockedSources() {
  const source=sourceRoot(),path=join(source,'pubspec.yaml');if(!existsSync(path))return [];
  const manifest=readFileSync(path,'utf8'),lock=readFileSync(join(source,'pubspec.lock'),'utf8'),result=[];
- for(const name of ['citizen_sdk','tatachat_sdk']) {
+ for(const name of ['citizen_sdk']) {
   const block=text=>[...text.matchAll(new RegExp('^  '+name+':\\r?\\n(?: {4,}[^\\n]*\\n|[ \\t]*\\n)+','gm'))];
   const a=block(manifest),b=block(lock);if(!a.length)continue;
   if(a.length!==1||b.length!==1)fail('Git来源记录不唯一');
@@ -261,7 +261,6 @@ export function lockedSources() {
 export function requirements(platform,work) {
  checkWork(work);const declared=platformContract(platform);
  const locks=declared.locks.map(value=>({...value})),sources=lockedSources(),archives=[];
- for(const source of sources){if(source.name==='citizen_sdk')continue;const packageRoot=join(work,'git-sources',source.name);if(existsSync(packageRoot))locks.push({ecosystem:'cargo',path:'native/Cargo.lock',source_package:source.name});}
  // Apple依赖方式由本产品源码决定；有Podfile就必须有原始锁，纯SwiftPM无需CocoaPods。
  const apple=platform.endsWith('ios')?'ios':platform.endsWith('macos')?'macos':null;
  if(apple){const base=sourceRoot(),pod=join(base,apple,'Podfile'),lock=join(base,apple,'Podfile.lock');
@@ -2379,7 +2378,6 @@ const {fileURLToPath,pathToFileURL}=await import('node:url');
 // Git检出和标准Flutter消费视图均属于本次工作根，宿主源码声明和锁保持原字节。
 const firstPartyRepositories = Object.freeze({
   citizen_sdk: 'https://github.com/crcfrcn/citizensdk.git',
-  tatachat_sdk: 'https://github.com/tuyutata/tatachatsdk.git',
 });
 function dependencyBlock(text, name) {
   const matches = [...text.matchAll(new RegExp('^  ' + name + ':\\n(?:[ \\t]{4,}[^\\n]*\\n)+', 'gm'))];
@@ -2643,15 +2641,14 @@ async function createProject(options, environment = process.env, signal) {
       put(item.input, join(p.output, 'android', item.name), true);
       if (item.name === 'gradlew') chmodSync(join(p.output, 'android', item.name), 0o755);
     }
-    // 宿主先验真Git原件，再调用各SDK唯一公开布局入口；只改写本轮Pub元数据副本。
+    // 宿主先验真Git原件，再调用 CitizenSDK 唯一公开消费入口；只改写本轮Pub元数据副本。
     const dependencies = resolveFirstPartyDependencies(p.source, p.work), views = {};
     for (const [name, item] of Object.entries(dependencies)) {
       const target = join(p.output, '.source-packages', name);
-      const api = await import(pathToFileURL(join(item.root, 'scripts',name==='citizen_sdk'?'build.mjs':'release.mjs')).href);
-      if(typeof api[name==='citizen_sdk'?'consume':'createFlutterSourceView']!=='function')fail('SDK缺少当前完整交付入口');
+      const api = await import(pathToFileURL(join(item.root, 'scripts','build.mjs')).href);
+      if(typeof api.consume!=='function')fail('SDK缺少当前完整交付入口');
       mkdirSync(dirname(target), { recursive: true });
-      if(name==='citizen_sdk')await api.consume({directory:environment.CITIZENSDK_PACKAGE,sourceSha:item.sha,output:target,signal});
-      else await api.createFlutterSourceView(item.root, target);
+      await api.consume({directory:environment.CITIZENSDK_PACKAGE,sourceSha:item.sha,output:target,signal});
       views[name] = target;
     }
     for (const [name, value] of Object.entries(projectedPubMetadata(p.source, dependencies, views))) {
