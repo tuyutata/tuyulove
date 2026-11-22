@@ -1,3 +1,5 @@
+// 初始化Flutter并启动途遇旅行应用。
+
 import 'package:citizen_sdk/citizen_sdk.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tuyulove/app/app.dart';

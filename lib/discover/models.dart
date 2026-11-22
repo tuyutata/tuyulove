@@ -1,3 +1,5 @@
+// 定义服务类别与经过验证的发现条目模型。
+
 enum ServiceKind {
   hotel,
   restaurant,

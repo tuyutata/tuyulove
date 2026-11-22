@@ -1,3 +1,5 @@
+// 读取和发布途遇游记条目。
+
 import 'package:tuyulove/network/secure_api_client.dart';
 import 'package:tuyulove/shared/ids.dart';
 import 'package:tuyulove/trip/models.dart';

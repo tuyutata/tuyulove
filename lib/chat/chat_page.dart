@@ -1,3 +1,5 @@
+// 展示途遇聊天会话与消息，处理输入和发送状态。
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuyulove/l10n/app_localizations.dart';

@@ -1,3 +1,5 @@
+// 编排途遇号登录、钱包签名、会话持久化和认证状态更新。
+
 import 'package:flutter/foundation.dart';
 import 'package:tuyulove/auth/auth_api.dart';
 import 'package:tuyulove/auth/business_proof.dart';

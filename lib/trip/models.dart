@@ -1,3 +1,5 @@
+// 定义游记条目的身份、内容与时间数据模型。
+
 final class TripPost {
   const TripPost({
     required this.tripId,

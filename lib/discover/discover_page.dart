@@ -1,3 +1,5 @@
+// 展示旅行服务搜索和类别筛选，处理刷新及向商家询价。
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuyulove/discover/models.dart';

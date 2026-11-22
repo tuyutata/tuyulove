@@ -1,3 +1,5 @@
+// 验证登录页面只以途遇号作为登录标识。
+
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';

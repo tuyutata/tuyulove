@@ -1,3 +1,5 @@
+// 创建并向组件树提供途遇旅行的认证与业务状态。
+
 import 'dart:async';
 
 import 'package:citizen_sdk/citizen_sdk.dart';

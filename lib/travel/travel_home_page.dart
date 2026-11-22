@@ -1,3 +1,5 @@
+// 组合途遇旅行首页导航与各业务页面，处理登录和状态展示。
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuyulove/auth/auth_controller.dart';

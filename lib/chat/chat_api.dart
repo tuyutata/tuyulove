@@ -1,3 +1,5 @@
+// 读取途遇聊天会话和消息，并提交会话消息。
+
 import 'package:tuyulove/chat/models.dart';
 import 'package:tuyulove/network/secure_api_client.dart';
 import 'package:tuyulove/shared/ids.dart';

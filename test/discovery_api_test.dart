@@ -1,3 +1,5 @@
+// 验证发现条目的签名、外层字段与载荷一致性，拒绝篡改或缺失字段。
+
 import 'dart:convert';
 import 'dart:typed_data';
 

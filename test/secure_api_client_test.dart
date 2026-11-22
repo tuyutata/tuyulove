@@ -1,3 +1,5 @@
+// 验证服务地址的HTTPS约束和游记、聊天模型的唯一身份字段。
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tuyulove/network/secure_api_client.dart';
 import 'package:tuyulove/trip/models.dart';

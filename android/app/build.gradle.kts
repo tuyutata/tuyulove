@@ -1,3 +1,5 @@
+// 配置途遇旅行Android应用身份、Flutter编译和多语言安装名称资源。
+
 import groovy.json.JsonSlurper
 import java.util.Properties
 

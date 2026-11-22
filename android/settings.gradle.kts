@@ -1,3 +1,5 @@
+// 读取Flutter插件清单并装配途遇旅行Android应用模块。
+
 import groovy.json.JsonSlurper
 
 pluginManagement {

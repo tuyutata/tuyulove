@@ -1,3 +1,5 @@
+// 配置途遇旅行应用主题、本地化和应用状态作用域。
+
 import 'package:citizen_sdk/citizen_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

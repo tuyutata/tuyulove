@@ -1,3 +1,5 @@
+// 展示游记列表并处理游记发布、刷新和错误状态。
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuyulove/l10n/app_localizations.dart';

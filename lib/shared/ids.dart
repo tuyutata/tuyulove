@@ -1,3 +1,5 @@
+// 生成带合法前缀的随机业务标识。
+
 import 'dart:math';
 
 String randomId(String prefix) {

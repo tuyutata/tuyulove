@@ -1,3 +1,5 @@
+// 定义途遇聊天会话和消息的身份、正文及时间模型。
+
 final class ChatConversation {
   const ChatConversation({
     required this.conversationId,

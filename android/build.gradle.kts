@@ -1,4 +1,5 @@
-// AGP与KGP必须由同一个根classpath解析，避免settings先锁定AGP内置的另一版KGP。
+// 统一途遇旅行Android插件及仓库配置，设置源码外构建目录。
+
 buildscript {
     repositories {
         google()

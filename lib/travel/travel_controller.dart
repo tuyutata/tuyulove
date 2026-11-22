@@ -1,3 +1,5 @@
+// 维护旅行首页的发现、预订、游记和聊天业务状态。
+
 import 'package:flutter/foundation.dart';
 import 'package:tuyulove/auth/auth_model.dart';
 import 'package:tuyulove/auth/business_proof.dart';

@@ -1,3 +1,5 @@
+// 提供途遇旅行Android端的Flutter宿主活动。
+
 package com.tuyulove
 
 import io.flutter.embedding.android.FlutterFragmentActivity

@@ -1,3 +1,5 @@
+// 定义业务请求取得账户签名证明的接口与不可用状态。
+
 import 'dart:typed_data';
 
 final class BusinessProof {

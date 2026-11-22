@@ -1,3 +1,5 @@
+// 调用途遇账户挑战与登录接口，解析认证挑战、证明和会话响应。
+
 import 'package:tuyulove/auth/auth_model.dart';
 import 'package:tuyulove/network/secure_api_client.dart';
 

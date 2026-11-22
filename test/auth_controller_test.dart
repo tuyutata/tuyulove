@@ -1,3 +1,5 @@
+// 验证登录签名编排、忙碌状态、真实SDK签名及认证失败传播。
+
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';

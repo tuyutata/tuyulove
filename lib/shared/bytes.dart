@@ -1,3 +1,5 @@
+// 拼接和清理业务字节，提供SCALE字符串、整数及十六进制转换。
+
 import 'dart:convert';
 import 'dart:typed_data';
 

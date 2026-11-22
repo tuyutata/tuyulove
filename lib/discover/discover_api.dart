@@ -1,3 +1,5 @@
+// 读取服务发现列表，通过签名与载荷匹配验证商家公开信息。
+
 import 'dart:convert';
 import 'dart:typed_data';
 

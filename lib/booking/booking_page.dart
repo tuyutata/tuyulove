@@ -1,3 +1,5 @@
+// 展示商家预订报价、确认预订按钮和订单状态。
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuyulove/l10n/app_localizations.dart';

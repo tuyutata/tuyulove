@@ -1,3 +1,5 @@
+// 验证预订报价与订单请求直接发送到商家端点。
+
 import 'dart:convert';
 import 'dart:typed_data';
 

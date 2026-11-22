@@ -1,3 +1,5 @@
+// 编码途遇业务操作的签名载荷，并计算绑定目标产品的Blake2摘要。
+
 import 'dart:typed_data';
 
 import 'package:polkadart/polkadart.dart';

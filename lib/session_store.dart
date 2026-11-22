@@ -1,3 +1,5 @@
+// 通过安全存储保存、读取和清除途遇认证会话。
+
 import 'dart:math';
 import 'dart:typed_data';
 

@@ -1,3 +1,5 @@
+// 通过CitizenSDK取得当前账户并完成途遇业务载荷签名。
+
 import 'dart:typed_data';
 
 import 'package:citizen_sdk/citizen_sdk.dart';

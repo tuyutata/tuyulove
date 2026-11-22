@@ -1,3 +1,5 @@
+// 定义商家预订报价与订单的传输模型。
+
 import 'package:tuyulove/discover/models.dart';
 
 final class MerchantQuote {

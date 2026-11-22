@@ -1,3 +1,5 @@
+// 定义途遇登录挑战、签名证明、会话和认证状态的数据模型。
+
 final class AuthChallenge {
   const AuthChallenge({
     required this.challengeId,

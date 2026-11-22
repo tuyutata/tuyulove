@@ -1,3 +1,5 @@
+// 封装途遇服务的HTTPS请求、响应解码与错误处理。
+
 import 'package:dio/dio.dart';
 
 abstract interface class SecureApiTransport {

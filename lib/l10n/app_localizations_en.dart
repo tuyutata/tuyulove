@@ -1,3 +1,5 @@
+// 提供途遇爱界面的英文文案。
+
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';

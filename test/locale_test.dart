@@ -1,3 +1,5 @@
+// 验证途遇旅行的中英文语言选择及平台安装名称资源。
+
 import 'dart:io';
 import 'dart:convert';
 

@@ -1,3 +1,5 @@
+// 向独立商家HTTPS端点提交实时业务请求，隔离途遇账户会话凭据。
+
 import 'package:dio/dio.dart';
 
 /// 商家实时接口独立于 TuyuServe；不向商家泄露 TuyuServe Bearer 会话。

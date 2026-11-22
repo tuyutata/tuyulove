@@ -1,3 +1,5 @@
+// 验证登录挑战绑定途遇旅行产品，响应时间仅接受整数毫秒。
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tuyulove/auth/auth_api.dart';
 import 'package:tuyulove/network/secure_api_client.dart';

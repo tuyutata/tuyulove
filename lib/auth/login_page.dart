@@ -1,3 +1,5 @@
+// 展示途遇号登录表单、签名等待状态及旅行主题背景。
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuyulove/auth/auth_controller.dart';

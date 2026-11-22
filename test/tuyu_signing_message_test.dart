@@ -1,3 +1,5 @@
+// 验证途遇签名摘要的确定性及目标产品绑定。
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tuyulove/auth/auth_model.dart';
 import 'package:tuyulove/auth/tuyu_signing_message.dart';

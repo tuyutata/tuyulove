@@ -1,3 +1,5 @@
+// 直接向商家请求实时预订报价和下单结果，并验证业务证明。
+
 import 'dart:convert';
 import 'dart:typed_data';
 
